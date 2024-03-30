@@ -6,6 +6,7 @@ export class Movie {
   id: number;
 
   @Column()
+  @Unique(['title'])
   title: string;
 
   @Column()

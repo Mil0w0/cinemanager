@@ -40,18 +40,20 @@ export class MoviesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) : Promise<Movie>{
+  async findOne(@Param('id') id: number): Promise<Movie> {
     return this.moviesService.findOne(id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateMovieDto: UpdateMovieDto): Promise<Movie>{
+  async update(
+    @Param('id') id: number,
+    @Body() updateMovieDto: UpdateMovieDto,
+  ): Promise<Movie> {
     return this.moviesService.update(id, updateMovieDto);
   }
 
   @Delete(':id')
-  @HttpCode(204 )
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<Movie> {
     return this.moviesService.remove(id);
   }
 }

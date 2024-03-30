@@ -1,7 +1,6 @@
-import { IsDate, IsPositive, IsString } from "class-validator";
+import { IsDate, IsPositive, IsString } from 'class-validator';
 
 export class UpdateMovieDto {
-
   @IsString()
   title?: string;
 
