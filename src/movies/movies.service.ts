@@ -9,6 +9,7 @@ import { Movie } from './movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieValidator } from './movies.validator';
+import {ListAllEntities} from "./dto/list-movies.dto";
 
 @Injectable()
 export class MoviesService {
@@ -40,7 +41,7 @@ export class MoviesService {
 
   async update(id: number, updates: UpdateMovieDto): Promise<Movie> {
     await this.findOne(id);
-    if(updates.title) {
+    if (updates.title) {
       const otherMovie = await this.moviesRepository.findOneBy({
         title: updates.title,
       });
@@ -52,8 +53,9 @@ export class MoviesService {
     return await this.moviesRepository.findOneBy({ id });
   }
 
-  async findAll(limit: number): Promise<Movie[]> {
-    return await this.moviesRepository.find({ take: limit });
+  async findAll(limit: number, page: number): Promise<Movie[]> {
+    //TODO: Validate the page number : 500 when page is 0 atm
+    return await this.moviesRepository.find({ take: limit, skip: (page-1) *limit });
   }
 
   async findOne(id: number): Promise<Movie> {

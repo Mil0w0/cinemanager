@@ -1,3 +1,5 @@
+import {ListAllEntities} from "./dto/list-movies.dto";
+
 export class MovieValidator {
     static validateCreateMovieDto(createMovieDto) {
         if (!createMovieDto.title) {
@@ -14,6 +16,12 @@ export class MovieValidator {
         }
         if (createMovieDto.duration <= 0) {
             throw new Error('Duration must be greater than 0');
+        }
+    }
+
+    static validateListEntities(listAllEntities: ListAllEntities){
+        if (listAllEntities.page <= 0) {
+            throw new Error('Page must be greater than 0');
         }
     }
 }

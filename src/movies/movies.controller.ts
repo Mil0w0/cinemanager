@@ -37,12 +37,22 @@ export class MoviesController {
     return this.moviesService.create(createMovieDto);
   }
 
+
+
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'The movies has been successfully fetched.',
+  })
   async findAll(@Query() query: ListAllEntities): Promise<Movie[]> {
-    return this.moviesService.findAll(query.limit);
+    return this.moviesService.findAll(query.limit, query.page);
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The movie has been successfully fetched.',
+  })
   async findOne(@Param('id') id: number): Promise<Movie> {
     return this.moviesService.findOne(id);
   }
