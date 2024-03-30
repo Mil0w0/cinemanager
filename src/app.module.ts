@@ -13,7 +13,7 @@ import { MoviesService } from './movies/movies.service';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: parseInt(process.env.DATABASE_PORT),
+      port: parseInt(process.env.HOST_DB_PORT),
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,

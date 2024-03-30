@@ -13,11 +13,22 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { ListAllEntities } from './dto/list-movies.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './movie.entity';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'The movie has been successfully created.',
+  })
+  //@ApiResponse({ status: 403, description: 'Forbidden.'})
+  @ApiBody({
+    type: CreateMovieDto,
+    description: 'Json structure for movie object',
+  })
   async create(@Body() createMovieDto: CreateMovieDto) {
     return this.moviesService.create(createMovieDto);
   }
