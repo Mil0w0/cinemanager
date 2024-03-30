@@ -4,9 +4,10 @@ import {
   Query,
   Post,
   Body,
-  Put,
   Param,
   Delete,
+  Patch,
+  HttpCode,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -39,17 +40,18 @@ export class MoviesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return `This action returns a #${id} cat`;
+  async findOne(@Param('id') id: number) : Promise<Movie>{
+    return this.moviesService.findOne(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} cat`;
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() updateMovieDto: UpdateMovieDto): Promise<Movie>{
+    return this.moviesService.update(id, updateMovieDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+  @HttpCode(204 )
+  async remove(@Param('id') id: number) {
+    return this.moviesService.remove(id);
   }
 }

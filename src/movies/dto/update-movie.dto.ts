@@ -1,6 +1,16 @@
+import { IsDate, IsPositive, IsString } from "class-validator";
+
 export class UpdateMovieDto {
-  title: string;
-  duration: number;
-  releaseDate: Date;
-  category: string;
+
+  @IsString()
+  title?: string;
+
+  @IsPositive()
+  duration?: number;
+
+  @IsDate()
+  releaseDate?: Date;
+
+  @IsString()
+  category?: string;
 }
