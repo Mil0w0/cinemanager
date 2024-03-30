@@ -25,7 +25,10 @@ export class MoviesController {
     status: 201,
     description: 'The movie has been successfully created.',
   })
-  //@ApiResponse({ status: 403, description: 'Forbidden.'})
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
   @ApiBody({
     type: CreateMovieDto,
     description: 'Json structure for movie object',
@@ -45,6 +48,14 @@ export class MoviesController {
   }
 
   @Patch(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The movie has been successfully updated.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
   async update(
     @Param('id') id: number,
     @Body() updateMovieDto: UpdateMovieDto,
@@ -53,6 +64,14 @@ export class MoviesController {
   }
 
   @Delete(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The movie has been successfully deleted.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Movie not found',
+  })
   async remove(@Param('id') id: number): Promise<Movie> {
     return this.moviesService.remove(id);
   }
