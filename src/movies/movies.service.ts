@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movie } from './movie.entity';
+import { CreateMovieDto } from './dto/create-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -9,6 +10,10 @@ export class MoviesService {
     @InjectRepository(Movie)
     private moviesRepository: Repository<Movie>,
   ) {}
+
+  create(movie: CreateMovieDto): Promise<Movie> {
+    return this.moviesRepository.save(movie);
+  }
 
   findAll(limit: number): Promise<Movie[]> {
     return this.moviesRepository.find({ take: limit });

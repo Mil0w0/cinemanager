@@ -1,3 +1,3 @@
 export class ListAllEntities {
-    limit: number;
+  limit: number;
 }

@@ -1,4 +1,13 @@
-import { Controller, Get, Query, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { ListAllEntities } from './dto/list-movies.dto';
@@ -7,12 +16,10 @@ import { Movie } from './movie.entity';
 
 @Controller('movies')
 export class MoviesController {
-
-    constructor(private readonly moviesService: MoviesService) {}
+  constructor(private readonly moviesService: MoviesService) {}
   @Post()
-  create(@Body() createMovieDto: CreateMovieDto) {
-
-    return 'This action adds a new cat';
+  async create(@Body() createMovieDto: CreateMovieDto) {
+    return this.moviesService.create(createMovieDto);
   }
 
   @Get()
