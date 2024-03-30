@@ -13,7 +13,7 @@ export class MoviesService {
   ) {}
 
   async create(movie: CreateMovieDto): Promise<Movie> {
-    const otherMovie = this.moviesRepository.findOneBy({ title: movie.title });
+    const otherMovie = await this.moviesRepository.findOneBy({ title: movie.title });
     if (otherMovie) {
       throw new BadRequestException(`Movie ${movie.title} already exists`);
     }
