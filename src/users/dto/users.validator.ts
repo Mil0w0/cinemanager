@@ -1,0 +1,38 @@
+import { CreateUserDto } from './create-user.dto';
+import { ListAllEntities } from './list-users.dto';
+import { BadRequestException } from '@nestjs/common';
+import { LoginUserDto } from './login-user.dto';
+
+export class UsersValidator {
+  static validateLoginUserDto(loginUserDto: LoginUserDto) {
+    if (!loginUserDto.email || !loginUserDto.password) {
+      throw new BadRequestException(`Missing field email or password`);
+    }
+  }
+  static validateCreateUserDto(createUserDto: CreateUserDto) {
+    if (!createUserDto.surname) {
+      throw new Error('Surname is required');
+    }
+    if (!createUserDto.firstName) {
+      throw new Error('First Name is required');
+    }
+    if (!createUserDto.birthDate) {
+      throw new Error('Birthdate is required');
+    }
+    if (!createUserDto.email) {
+      throw new Error('Email is required');
+    }
+    if (!createUserDto.password) {
+      throw new Error('Password must be greater than 0');
+    }
+    if (createUserDto.password.length < 8) {
+      throw new Error('8 characters minimum required for password.');
+    }
+  }
+
+  static validateListEntities(listAllEntities: ListAllEntities) {
+    if (listAllEntities.page <= 0) {
+      throw new Error('Page must be greater than 0');
+    }
+  }
+}
