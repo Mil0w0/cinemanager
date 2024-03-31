@@ -59,7 +59,10 @@ export class RoomsController {
   }
 
   @Post(':id/images')
-  async uploadPicture(@Param('id') id: number, @Body() createPictureDto: CreatePictureDto) {
+  async uploadPicture(
+    @Param('id') id: number,
+    @Body() createPictureDto: CreatePictureDto,
+  ) {
     return this.roomsService.addPicture(id, createPictureDto);
   }
 
@@ -74,12 +77,19 @@ export class RoomsController {
   }
 
   @Patch(':id/images/:imageId')
-  async updatePicture(@Param('id') id: number, @Param('imageId') imageId: number, @Body() updatePictureDto: CreatePictureDto) {
+  async updatePicture(
+    @Param('id') id: number,
+    @Param('imageId') imageId: number,
+    @Body() updatePictureDto: CreatePictureDto,
+  ) {
     return this.roomsService.updatePicture(id, imageId, updatePictureDto);
   }
 
   @Delete(':id/images/:imageId')
-  async removePicture(@Param('id') id: number, @Param('imageId') imageId: number) {
+  async removePicture(
+    @Param('id') id: number,
+    @Param('imageId') imageId: number,
+  ) {
     return this.roomsService.removePicture(id, imageId);
   }
 }

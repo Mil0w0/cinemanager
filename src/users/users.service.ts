@@ -1,13 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {BadRequestException, Injectable, NotFoundException,} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {User} from './user.entity';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {hash} from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +25,9 @@ export class UsersService {
     if (otherUser) {
       throw new BadRequestException(`Email ${user.email} already exists`);
     }
+
+    user.password = await hash(user.password, 10);
+
     try {
       return await this.usersRepository.save(user);
     } catch (error) {

@@ -12,11 +12,9 @@ import {
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { CreateMovieDto } from '../movies/dto/create-movie.dto';
+import { ListAllEntities } from './dto/list-users.dto';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Movie } from '../movies/movie.entity';
-import { ListAllEntities } from './dto/list-movies.dto';
 
 @ApiTags('Users')
 @Controller('users')

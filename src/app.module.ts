@@ -24,12 +24,17 @@ import { Picture } from './pictures/picture.entity';
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Movie, Room, Picture],
+      entities: [Movie, Room, Picture, User],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Movie, Room, Picture, User]),
   ],
-  controllers: [AppController, MoviesController, RoomsController, UsersController],
+  controllers: [
+    AppController,
+    MoviesController,
+    RoomsController,
+    UsersController,
+  ],
   providers: [AppService, MoviesService, RoomsService, UsersService],
 })
 export class AppModule {}

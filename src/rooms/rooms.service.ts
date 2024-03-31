@@ -44,7 +44,7 @@ export class RoomsService {
 
   async update(id: number, updates: UpdateRoomDto): Promise<Room> {
     await this.findOne(id);
-    if(updates.name) {
+    if (updates.name) {
       const otherRoom = await this.roomsRepository.findOneBy({
         name: updates.name,
       });
@@ -74,13 +74,18 @@ export class RoomsService {
     return room;
   }
 
-  async addPicture(id: number, CreatePictureDto: CreatePictureDto): Promise<Picture> {
+  async addPicture(
+    id: number,
+    CreatePictureDto: CreatePictureDto,
+  ): Promise<Picture> {
     const room = await this.findOne(id);
     const otherPicture = await this.picturesRepository.findOneBy({
       name: CreatePictureDto.url,
     });
     if (otherPicture) {
-      throw new BadRequestException(`Picture with url ${CreatePictureDto.url} already exists`);
+      throw new BadRequestException(
+        `Picture with url ${CreatePictureDto.url} already exists`,
+      );
     }
     CreatePictureDto.room = room;
     return this.picturesRepository.save(CreatePictureDto);
@@ -100,7 +105,11 @@ export class RoomsService {
     return this.picturesRepository.find({ where: { room: room } });
   }
 
-  async updatePicture(idRoom: number, idPicture: number, updatePictureDto: CreatePictureDto): Promise<Picture> {
+  async updatePicture(
+    idRoom: number,
+    idPicture: number,
+    updatePictureDto: CreatePictureDto,
+  ): Promise<Picture> {
     await this.findOne(idRoom);
     await this.findOnePicture(idRoom, idPicture);
     await this.picturesRepository.update(idPicture, updatePictureDto);
