@@ -37,8 +37,6 @@ export class MoviesController {
     return this.moviesService.create(createMovieDto);
   }
 
-
-
   @Get()
   @ApiResponse({
     status: 200,

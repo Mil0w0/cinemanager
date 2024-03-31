@@ -2,22 +2,21 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    surname: string;
+  @Column()
+  surname: string;
 
-    @Column()
-    firstName: string;
+  @Column()
+  firstName: string;
 
-    @Column()
-    birthDate: Date;
+  @Column()
+  birthDate: Date;
 
-    @Column()
-    email: string;
+  @Column()
+  email: string;
 
-    @Column()
-    hashedPassword: string;
-
+  @Column()
+  hashedPassword: string;
 }
