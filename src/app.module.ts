@@ -9,6 +9,10 @@ import { MoviesService } from './movies/movies.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { User } from './users/user.entity';
+import { Room } from './rooms/room.entity';
+import { RoomsController } from './rooms/rooms.controller';
+import { RoomsService } from './rooms/rooms.service';
+import { Picture } from './pictures/picture.entity';
 
 @Module({
   imports: [
@@ -20,12 +24,12 @@ import { User } from './users/user.entity';
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Movie, User],
+      entities: [Movie, Room, Picture],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Movie, User]),
+    TypeOrmModule.forFeature([Movie, Room, Picture, User]),
   ],
-  controllers: [AppController, MoviesController, UsersController],
-  providers: [AppService, MoviesService, UsersService],
+  controllers: [AppController, MoviesController, RoomsController, UsersController],
+  providers: [AppService, MoviesService, RoomsService, UsersService],
 })
 export class AppModule {}

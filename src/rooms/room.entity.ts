@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Picture } from 'src/pictures/picture.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Room {
@@ -19,4 +20,7 @@ export class Room {
 
   @Column()
   hasDisabledAccess: boolean;
+
+  @OneToMany(() => Picture, (picture) => picture.id)
+  pictures: Picture[];
 }
