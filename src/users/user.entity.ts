@@ -24,4 +24,9 @@ export class User {
 
   @Column()
   loginToken: string;
+
+  @Column({
+    default: 'user',
+  })
+  roles: string;
 }

@@ -13,12 +13,9 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { ListAllEntities } from './dto/list-movies.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './movie.entity';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/roles.enum';
 
 @ApiTags('Movies')
 @Controller('movies')
@@ -26,6 +23,7 @@ import {
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Post()
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 201,
     description: 'The movie has been successfully created.',
@@ -61,6 +59,7 @@ export class MoviesController {
   }
 
   @Patch(':id')
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully updated.',
@@ -77,6 +76,7 @@ export class MoviesController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully deleted.',

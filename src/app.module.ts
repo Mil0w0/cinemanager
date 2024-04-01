@@ -16,6 +16,7 @@ import { Picture } from './pictures/picture.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { SetMetadata } from '@nestjs/common';
+import { RolesGuard } from './roles/roles.guard';
 
 @Module({
   imports: [
@@ -42,6 +43,10 @@ import { SetMetadata } from '@nestjs/common';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     AppService,
     MoviesService,
