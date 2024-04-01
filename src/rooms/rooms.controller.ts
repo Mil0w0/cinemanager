@@ -1,32 +1,35 @@
 import {
-  Controller,
-  Get,
-  Query,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   Patch,
-  HttpCode,
+  Post,
+  Query,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListAllEntities } from './dto/list-rooms.dto';
 import { Room } from './room.entity';
 import { CreatePictureDto } from 'src/pictures/dto/create-picture.dto';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/roles.enum';
 
 @ApiTags('Rooms')
+@ApiBearerAuth('JWT-auth')
 @Controller('rooms')
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
   @Post()
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 201,
     description: 'The room has been successfully created.',
   })
-  //@ApiResponse({ status: 403, description: 'Forbidden.'})
+  @ApiResponse({ status: 403, description: 'Forbidden access.' })
   @ApiBody({
     type: CreateRoomDto,
     description: 'Json structure for room object',
@@ -46,6 +49,7 @@ export class RoomsController {
   }
 
   @Patch(':id')
+  @Roles(Role.Admin)
   async update(
     @Param('id') id: number,
     @Body() updateRoomDto: UpdateRoomDto,
@@ -54,11 +58,13 @@ export class RoomsController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async remove(@Param('id') id: number): Promise<Room> {
     return this.roomsService.remove(id);
   }
 
   @Post(':id/images')
+  @Roles(Role.Admin)
   async uploadPicture(
     @Param('id') id: number,
     @Body() createPictureDto: CreatePictureDto,
@@ -77,6 +83,7 @@ export class RoomsController {
   }
 
   @Patch(':id/images/:imageId')
+  @Roles(Role.Admin)
   async updatePicture(
     @Param('id') id: number,
     @Param('imageId') imageId: number,
@@ -86,6 +93,7 @@ export class RoomsController {
   }
 
   @Delete(':id/images/:imageId')
+  @Roles(Role.Admin)
   async removePicture(
     @Param('id') id: number,
     @Param('imageId') imageId: number,

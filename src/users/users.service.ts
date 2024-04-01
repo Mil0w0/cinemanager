@@ -68,9 +68,13 @@ export class UsersService {
     try {
       //Token generation
       const secret = process.env.JWT_SECRET ?? '';
-      const token = sign({ userId: user.id, email: user.email }, secret, {
-        expiresIn: '1h',
-      });
+      const token = sign(
+        { userId: user.id, email: user.email, roles: user.roles },
+        secret,
+        {
+          expiresIn: '1h',
+        },
+      );
       await this.usersRepository.update(user.id, { loginToken: token });
 
       return {

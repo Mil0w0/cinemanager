@@ -43,5 +43,5 @@ export class CreateUserDto {
     example: 'user',
     required: false,
   })
-  roles: string = 'user';
+  roles?: string;
 }
