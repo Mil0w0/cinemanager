@@ -13,6 +13,9 @@ import { Room } from './rooms/room.entity';
 import { RoomsController } from './rooms/rooms.controller';
 import { RoomsService } from './rooms/rooms.service';
 import { Picture } from './pictures/picture.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/auth.guard';
+import { SetMetadata } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -35,6 +38,15 @@ import { Picture } from './pictures/picture.entity';
     RoomsController,
     UsersController,
   ],
-  providers: [AppService, MoviesService, RoomsService, UsersService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+    MoviesService,
+    RoomsService,
+    UsersService,
+  ],
 })
 export class AppModule {}
