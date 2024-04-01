@@ -25,6 +25,7 @@ export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post('register')
+  @SkipAuthentication() //Allow user to do this without already being logged in (smert)
   @ApiResponse({
     status: 201,
     description: 'The user has been successfully created.',
@@ -42,7 +43,7 @@ export class UsersController {
   }
 
   @Post('login')
-  @SkipAuthentication() //Allow user to log in without already being logged in (smert)
+  @SkipAuthentication()
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully logged in.',
@@ -78,7 +79,7 @@ export class UsersController {
   @Get()
   @ApiHeaders([
     {
-      name: 'Authorization',
+      name: 'Authorization Bearer Token',
     },
   ])
   // @UseGuards(JwtAuthGuard) Before making it global this was needed

@@ -7,7 +7,7 @@ import { CAN_SKIP_AUTH_KEY } from '../users/users.controller';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   private readonly secretKey = process.env.JWT_SECRET;
-  private reflector: Reflector;
+  constructor(private readonly reflector: Reflector) {} // Inject Reflector
 
   canActivate(
     context: ExecutionContext,

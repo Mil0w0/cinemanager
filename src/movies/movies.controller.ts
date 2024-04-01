@@ -7,17 +7,22 @@ import {
   Param,
   Delete,
   Patch,
-  HttpCode,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { ListAllEntities } from './dto/list-movies.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './movie.entity';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Movies')
 @Controller('movies')
+@ApiBearerAuth('JWT-auth')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Post()

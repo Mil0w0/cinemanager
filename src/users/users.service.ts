@@ -12,7 +12,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { hash, compare } from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { sign } from 'jsonwebtoken';
-import { json } from 'express';
 import { LogoutUserDto } from './dto/logout-user.dto';
 import { UsersValidator } from './dto/users.validator';
 
