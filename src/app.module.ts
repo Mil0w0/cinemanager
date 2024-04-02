@@ -17,6 +17,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { SetMetadata } from '@nestjs/common';
 import { RolesGuard } from './roles/roles.guard';
+import { Screening } from './screenings/screening.entity';
+import { ScreeningsController } from './screenings/screenings.controller';
+import { ScreeningsService } from './screenings/screenings.service';
 
 @Module({
   imports: [
@@ -28,16 +31,17 @@ import { RolesGuard } from './roles/roles.guard';
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Movie, Room, Picture, User],
+      entities: [Movie, Room, Picture, User, Screening],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Movie, Room, Picture, User]),
+    TypeOrmModule.forFeature([Movie, Room, Picture, User, Screening]),
   ],
   controllers: [
     AppController,
     MoviesController,
     RoomsController,
     UsersController,
+    ScreeningsController,
   ],
   providers: [
     {
@@ -52,6 +56,7 @@ import { RolesGuard } from './roles/roles.guard';
     MoviesService,
     RoomsService,
     UsersService,
+    ScreeningsService,
   ],
 })
 export class AppModule {}

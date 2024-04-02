@@ -1,15 +1,15 @@
-import { ListAllEntities } from './dto/list-movies.dto';
+import { ListAllEntities } from './dto/list-screening.dto';
 
-export class MovieValidator {
-  static validateCreateMovieDto(createMovieDto) {
-    if (!createMovieDto.title) {
-      throw new Error('Title is required');
+export class ScreeningValidator {
+  static validateCreateScreeningDto(createMovieDto) {
+    if (!createMovieDto.movie) {
+      throw new Error('Movie is required');
     }
-    if (!createMovieDto.releaseDate) {
-      throw new Error('Release date is required');
+    if (!createMovieDto.room) {
+      throw new Error('Room date is required');
     }
-    if (!createMovieDto.category) {
-      throw new Error('Category is required');
+    if (!createMovieDto.startingTime) {
+      throw new Error('Starting time is required');
     }
     if (!createMovieDto.duration) {
       throw new Error('Duration is required');

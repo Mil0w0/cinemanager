@@ -15,8 +15,7 @@ import { UpdateScreeningDto } from './dto/update-screening.dto';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
 import { Role } from '../roles/roles.enum';
-import {Screening} from "./screening.entity";
-import {Movie} from "../movies/movie.entity";
+import { Screening } from './screening.entity';
 
 @ApiTags('Screenings')
 @Controller('screenings')

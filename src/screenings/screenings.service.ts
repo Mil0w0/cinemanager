@@ -7,28 +7,27 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Screening } from './screening.entity';
 import { CreateScreeningDto } from './dto/create-screening.dto';
-import { UpdateScreeningDto } from './dto/update-movie.dto';
-import { MovieValidator } from './screenings.validator';
-import { ListAllEntities } from './dto/list-movies.dto';
+import { UpdateScreeningDto } from './dto/update-screening.dto';
+import { ScreeningValidator } from './screenings.validator';
 
 @Injectable()
 export class ScreeningsService {
   constructor(
     @InjectRepository(Screening)
-    private moviesRepository: Repository<Screening>,
+    private screeningsRepository: Repository<Screening>,
   ) {}
 
-  async create(movie: CreateScreeningDto): Promise<Screening> {
+  async create(screening: CreateScreeningDto): Promise<Screening> {
     try {
       ScreeningValidator.validateCreateScreeningDto(screening);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
     const otherScreening = await this.screeningsRepository.findOneBy({
-      //title: screening.title,
+        duration: screening.duration,
     });
     if (otherScreening) {
-      throw new BadRequestException(`Screening ${screening.id} already exists`);
+      throw new BadRequestException(`Screening at ${screening.duration} already exists`);
     }
     try {
       return await this.screeningsRepository.save(screening);
@@ -41,37 +40,39 @@ export class ScreeningsService {
 
   async update(id: number, updates: UpdateScreeningDto): Promise<Screening> {
     await this.findOne(id);
-    if (updates.title) {
+    if (updates.duration) {
       const otherScreening = await this.screeningsRepository.findOneBy({
-        title: updates.title,
+        duration: updates.duration,
       });
       if (otherScreening) {
-        throw new BadRequestException(`Screening ${updates.title} already exists`);
+        throw new BadRequestException(
+          `Screening at ${updates.duration} already exists`,
+        );
       }
     }
-    await this.moviesRepository.update(id, updates);
-    return await this.moviesRepository.findOneBy({ id });
+    await this.screeningsRepository.update(id, updates);
+    return await this.screeningsRepository.findOneBy({ id });
   }
 
   async findAll(limit: number, page: number): Promise<Screening[]> {
     //TODO: Validate the page number : 500 when page is 0 atm and total COunt ?
-    return await this.moviesRepository.find({
+    return await this.screeningsRepository.find({
       take: limit,
       skip: (page - 1) * limit,
     });
   }
 
   async findOne(id: number): Promise<Screening> {
-    const movie = await this.moviesRepository.findOneBy({ id });
-    if (!movie) {
+    const screening = await this.screeningsRepository.findOneBy({ id });
+    if (!screening) {
       throw new NotFoundException(`Screening #${id} not found`);
     }
-    return movie;
+    return screening;
   }
 
   async remove(id: number): Promise<Screening> {
     const movie = await this.findOne(id);
-    await this.moviesRepository.delete(id);
+    await this.screeningsRepository.delete(id);
     return movie;
   }
 }
