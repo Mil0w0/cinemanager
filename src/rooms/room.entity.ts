@@ -1,5 +1,6 @@
 import { Picture } from 'src/pictures/picture.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Screening } from '../screenings/screening.entity';
 
 @Entity()
 export class Room {
@@ -23,4 +24,7 @@ export class Room {
 
   @OneToMany(() => Picture, (picture) => picture.id)
   pictures: Picture[];
+
+  @OneToMany(() => Screening, (screening) => screening.room)
+  screenings: Screening[];
 }

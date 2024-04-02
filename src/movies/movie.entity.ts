@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Unique,
+  OneToMany,
+} from 'typeorm';
+import { Screening } from '../screenings/screening.entity';
 
 @Entity()
 export class Movie {
@@ -17,4 +24,7 @@ export class Movie {
 
   @Column()
   category: string;
+
+  @OneToMany(() => Screening, (screening: Screening) => screening.movie)
+  screenings: Screening[];
 }
