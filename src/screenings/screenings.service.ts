@@ -9,6 +9,7 @@ import { Screening } from './screening.entity';
 import { CreateScreeningDto } from './dto/create-screening.dto';
 import { UpdateScreeningDto } from './dto/update-screening.dto';
 import { ScreeningValidator } from './screenings.validator';
+import { Movie } from '../movies/movie.entity';
 
 @Injectable()
 export class ScreeningsService {
@@ -22,12 +23,6 @@ export class ScreeningsService {
       ScreeningValidator.validateCreateScreeningDto(screening);
     } catch (error) {
       throw new BadRequestException(error.message);
-    }
-    const otherScreening = await this.screeningsRepository.findOneBy({
-        duration: screening.duration,
-    });
-    if (otherScreening) {
-      throw new BadRequestException(`Screening at ${screening.duration} already exists`);
     }
     try {
       return await this.screeningsRepository.save(screening);
@@ -57,8 +52,8 @@ export class ScreeningsService {
   async findAll(limit: number, page: number): Promise<Screening[]> {
     //TODO: Validate the page number : 500 when page is 0 atm and total COunt ?
     return await this.screeningsRepository.find({
-      take: limit,
-      skip: (page - 1) * limit,
+      take: limit || 10,
+      skip: (page - 1) * limit || 0,
     });
   }
 

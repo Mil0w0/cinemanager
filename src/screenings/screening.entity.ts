@@ -13,11 +13,9 @@ export class Screening {
   @Column()
   startingTime: Date;
 
-  @Column(
-    {
-      default: 0
-    }
-  )
+  @Column({
+    default: 0,
+  })
   entries: number;
 
   @ManyToOne(() => Movie, (movie: Movie) => movie.screenings)
