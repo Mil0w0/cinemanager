@@ -2,6 +2,8 @@ import { ListAllEntities } from './dto/list-screening.dto';
 import { BadRequestException } from '@nestjs/common';
 import { Screening } from './screening.entity';
 import { CreateScreeningDto } from './dto/create-screening.dto';
+import { Movie } from '../movies/movie.entity';
+import { Room } from '../rooms/room.entity';
 
 const MINIMUM_SCREENING_EXTRA_DURATION = 30;
 const CINEMA_OPENING_HOUR = 8;
@@ -17,35 +19,43 @@ export class ScreeningValidator {
     if (!createSCreeningDto.duration) {
       throw new Error('Duration is required');
     }
-    if (createSCreeningDto.duration <= 0) {
-      throw new Error('Duration must be greater than 0');
-    }
-    if (
-      createSCreeningDto.movie.duration + MINIMUM_SCREENING_EXTRA_DURATION <
-      createSCreeningDto.duration
-    ) {
-      throw new BadRequestException(
-        `Screening duration must be more than ${createSCreeningDto.movie.duration + MINIMUM_SCREENING_EXTRA_DURATION} minutes(movie duration + extra time)`,
-      );
-    }
     if (!createSCreeningDto.startingTime) {
       throw new Error('Starting time of the screening is required');
     }
-    this.validateStartingTime(createSCreeningDto);
   }
+
+  static validateTimeAndDuration(
+    screening: CreateScreeningDto,
+    movie: Movie,
+    room: Room,
+    roomScreenings: Screening[],
+  ) {
+    if (
+      movie.duration + MINIMUM_SCREENING_EXTRA_DURATION >
+      screening.duration
+    ) {
+      throw new BadRequestException(
+        `Screening duration must be more than ${movie.duration + MINIMUM_SCREENING_EXTRA_DURATION} minutes(movie duration + extra time)`,
+      );
+    }
+    this.validateStartingTime(screening, room, roomScreenings);
+  }
+
   private static validateStartingTime(
     createSCreeningDto: CreateScreeningDto,
+    room: Room,
+    roomScreenings: Screening[],
   ): void {
     const screeningStartingTime = new Date(createSCreeningDto.startingTime);
-    console.log(screeningStartingTime);
+    console.log("S1 Start at: " +screeningStartingTime);
 
     //STARTING TIME AND DURATION VALIDATION
     const screeningEndingDate: Date = new Date(
       screeningStartingTime.setMinutes(
-        screeningStartingTime.getMinutes() +
-          createSCreeningDto.duration),
+        screeningStartingTime.getMinutes() + createSCreeningDto.duration,
+      ),
     );
-    console.log(screeningEndingDate);
+    console.log("S1 Ends at: " + screeningEndingDate);
 
     if (
       screeningStartingTime.getHours() < CINEMA_OPENING_HOUR ||
@@ -55,9 +65,9 @@ export class ScreeningValidator {
         `Screening cannot start before the cinema opens at ${CINEMA_OPENING_HOUR}:00 or end after the cinema closes at ${CINEMA_CLOSING_HOUR}:00`,
       );
     }
-    if (createSCreeningDto.room.screenings) {
-      createSCreeningDto.room.screenings.forEach((s: Screening) => {
-        //TYPE ISSUE????
+    if (roomScreenings) {
+      roomScreenings.forEach((s: Screening) => {
+        console.log("Sx starts at: " + s.startingTime);
         const otherScreeningEndingDate: Date = new Date(
           s.startingTime.setMinutes(s.startingTime.getMinutes() + s.duration),
         );
@@ -70,7 +80,7 @@ export class ScreeningValidator {
             screeningEndingDate < otherScreeningEndingDate)
         ) {
           throw new BadRequestException(
-            `The screening will overlap another one in room ${createSCreeningDto.room.id}`,
+            `The screening will overlap another one in room ${createSCreeningDto.roomID}`,
           );
         }
       });

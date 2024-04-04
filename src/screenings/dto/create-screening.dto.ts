@@ -25,12 +25,12 @@ export class CreateScreeningDto {
     description: 'Movie id',
     required: true,
   })
-  movie: Movie;
+  movieID: number;
 
   @ApiProperty({
     example: '2',
     description: 'Room id',
     required: true,
   })
-  room: Room;
+  roomID: number;
 }

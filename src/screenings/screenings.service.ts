@@ -10,12 +10,17 @@ import { CreateScreeningDto } from './dto/create-screening.dto';
 import { UpdateScreeningDto } from './dto/update-screening.dto';
 import { ScreeningValidator } from './screenings.validator';
 import { Movie } from '../movies/movie.entity';
+import { Room } from '../rooms/room.entity';
 
 @Injectable()
 export class ScreeningsService {
   constructor(
     @InjectRepository(Screening)
     private screeningsRepository: Repository<Screening>,
+    @InjectRepository(Screening)
+    private moviesRepository: Repository<Movie>,
+    @InjectRepository(Screening)
+    private roomsRepository: Repository<Room>,
   ) {}
 
   async create(screening: CreateScreeningDto): Promise<Screening> {
@@ -23,6 +28,28 @@ export class ScreeningsService {
       ScreeningValidator.validateCreateScreeningDto(screening);
     } catch (error) {
       throw new BadRequestException(error.message);
+    }
+
+    const room: Room = await this.roomsRepository.findOneBy({
+      id: screening.roomID,
+    });
+    const movie: Movie = await this.moviesRepository.findOneBy({
+      id: screening.movieID,
+    });
+
+    let roomScreenings: Screening[];
+    try {
+      if (movie && room) {
+        console.log(room.screenings)
+        if (room.screenings){
+          roomScreenings = await this.screeningsRepository.find({
+            where: { room: room }}
+          );
+          }
+        }
+        ScreeningValidator.validateTimeAndDuration(screening, movie, room, roomScreenings);
+    } catch (error) {
+        throw new BadRequestException(error.message);
     }
     try {
       return await this.screeningsRepository.save(screening);
@@ -54,6 +81,7 @@ export class ScreeningsService {
     return await this.screeningsRepository.find({
       take: limit || 10,
       skip: (page - 1) * limit || 0,
+      relations: ['movie', 'room'],
     });
   }
 

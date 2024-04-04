@@ -57,7 +57,7 @@ export class RoomsService {
   }
 
   async findAll(limit: number): Promise<Room[]> {
-    return await this.roomsRepository.find({ take: limit });
+    return await this.roomsRepository.find({ take: limit});
   }
 
   async findOne(id: number): Promise<Room> {
