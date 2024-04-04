@@ -22,6 +22,9 @@ export class Room {
   @Column()
   hasDisabledAccess: boolean;
 
+  @Column()
+  type: string;
+
   @OneToMany(() => Picture, (picture) => picture.room)
   pictures: Picture[];
 
