@@ -46,16 +46,16 @@ export class ScreeningValidator {
     room: Room,
     roomScreenings: Screening[],
   ): void {
-    const screeningStartingTime = new Date(createSCreeningDto.startingTime);
-    console.log("S1 Start at: " +screeningStartingTime);
+    const screeningStartingTime: Date = new Date(
+      createSCreeningDto.startingTime,
+    );
 
     //STARTING TIME AND DURATION VALIDATION
-    const screeningEndingDate: Date = new Date(
-      screeningStartingTime.setMinutes(
-        screeningStartingTime.getMinutes() + createSCreeningDto.duration,
-      ),
+
+    screeningStartingTime.setMinutes(
+      screeningStartingTime.getMinutes() + createSCreeningDto.duration,
     );
-    console.log("S1 Ends at: " + screeningEndingDate);
+    const screeningEndingDate: Date = new Date(createSCreeningDto.startingTime);
 
     if (
       screeningStartingTime.getHours() < CINEMA_OPENING_HOUR ||
@@ -67,17 +67,17 @@ export class ScreeningValidator {
     }
     if (roomScreenings) {
       roomScreenings.forEach((s: Screening) => {
-        console.log("Sx starts at: " + s.startingTime);
-        const otherScreeningEndingDate: Date = new Date(
-          s.startingTime.setMinutes(s.startingTime.getMinutes() + s.duration),
-        );
+        const otherScreeningStartingDate: Date = new Date(s.startingTime);
+        s.startingTime.setMinutes(s.startingTime.getMinutes() + s.duration);
+        const otherScreeningEndingDate: Date = new Date(s.startingTime);
+
         if (
           //screening starts during another screening in this room
-          (screeningStartingTime > s.startingTime &&
-            screeningStartingTime < otherScreeningEndingDate) ||
+          (screeningStartingTime > otherScreeningStartingDate &&
+            screeningStartingTime <= otherScreeningEndingDate) ||
           //screening ends during another screening in this room
-          (screeningEndingDate > s.startingTime &&
-            screeningEndingDate < otherScreeningEndingDate)
+          (screeningEndingDate > otherScreeningStartingDate &&
+            screeningEndingDate <= otherScreeningEndingDate)
         ) {
           throw new BadRequestException(
             `The screening will overlap another one in room ${createSCreeningDto.roomID}`,

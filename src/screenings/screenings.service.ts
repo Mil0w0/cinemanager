@@ -17,9 +17,9 @@ export class ScreeningsService {
   constructor(
     @InjectRepository(Screening)
     private screeningsRepository: Repository<Screening>,
-    @InjectRepository(Screening)
+    @InjectRepository(Movie)
     private moviesRepository: Repository<Movie>,
-    @InjectRepository(Screening)
+    @InjectRepository(Room)
     private roomsRepository: Repository<Room>,
   ) {}
 
@@ -37,19 +37,20 @@ export class ScreeningsService {
       id: screening.movieID,
     });
 
-    let roomScreenings: Screening[];
+    const roomScreenings: Screening[] = await this.screeningsRepository.find({
+      where: { room },
+    });
     try {
       if (movie && room) {
-        console.log(room.screenings)
-        if (room.screenings){
-          roomScreenings = await this.screeningsRepository.find({
-            where: { room: room }}
-          );
-          }
-        }
-        ScreeningValidator.validateTimeAndDuration(screening, movie, room, roomScreenings);
+        ScreeningValidator.validateTimeAndDuration(
+          screening,
+          movie,
+          room,
+          roomScreenings,
+        );
+      }
     } catch (error) {
-        throw new BadRequestException(error.message);
+      throw new BadRequestException(error.message);
     }
     try {
       return await this.screeningsRepository.save(screening);
@@ -86,7 +87,10 @@ export class ScreeningsService {
   }
 
   async findOne(id: number): Promise<Screening> {
-    const screening = await this.screeningsRepository.findOneBy({ id });
+    const screening = await this.screeningsRepository.findOne({
+      where: { id },
+      relations: ['movie', 'room'],
+    });
     if (!screening) {
       throw new NotFoundException(`Screening #${id} not found`);
     }

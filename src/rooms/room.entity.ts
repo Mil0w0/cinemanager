@@ -22,7 +22,7 @@ export class Room {
   @Column()
   hasDisabledAccess: boolean;
 
-  @OneToMany(() => Picture, (picture) => picture.id)
+  @OneToMany(() => Picture, (picture) => picture.room)
   pictures: Picture[];
 
   @OneToMany(() => Screening, (screening) => screening.room)

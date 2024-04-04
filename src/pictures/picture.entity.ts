@@ -12,6 +12,6 @@ export class Picture {
   @Column()
   url: string;
 
-  @ManyToOne(() => Room, (room) => room.id)
+  @ManyToOne(() => Room, (room) => room.pictures)
   room: Room;
 }
