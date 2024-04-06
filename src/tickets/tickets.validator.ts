@@ -1,4 +1,4 @@
-import { ListAllEntities } from './dto/list-tickets.dto';
+import { ListTicketsDto } from './dto/list-tickets.dto';
 import { User } from '../users/user.entity';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { Repository } from 'typeorm';
@@ -36,7 +36,7 @@ export class TicketsValidator {
     }
   }
 
-  static validateListEntities(listAllEntities: ListAllEntities) {
+  static validateListEntities(listAllEntities: ListTicketsDto) {
     if (listAllEntities.page <= 0) {
       throw new Error('Page must be greater than 0');
     }

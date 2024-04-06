@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ListAllEntities {
+export class ListTicketsDto {
   @ApiProperty({
     example: '3',
     required: false,
@@ -11,4 +11,10 @@ export class ListAllEntities {
     required: false,
   })
   page?: number;
+
+  @ApiProperty({
+    example: '1',
+    required: false,
+  })
+  userID: number;
 }

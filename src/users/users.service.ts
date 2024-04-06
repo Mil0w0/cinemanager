@@ -14,12 +14,22 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { sign } from 'jsonwebtoken';
 import { LogoutUserDto } from './dto/logout-user.dto';
 import { UsersValidator } from './dto/users.validator';
+import { Ticket } from '../tickets/ticket.entity';
+import { TicketType } from '../ticketTypes/ticketType.entity';
+import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
+import { TicketsValidator } from '../tickets/tickets.validator';
+import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
+import { UpdateTicketDto } from '../tickets/dto/update-ticket.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Ticket)
+    private ticketsRepository: Repository<Ticket>,
+    @InjectRepository(TicketType)
+    private tickeTypesRepository: Repository<TicketType>,
   ) {}
 
   async create(user: CreateUserDto): Promise<User> {
@@ -135,5 +145,67 @@ export class UsersService {
     const user = await this.findOne(id);
     await this.usersRepository.delete(id);
     return user;
+  }
+
+  //TODO: only user connected can buy a ticket for themselves
+  async buyTicket(ticket: CreateTicketDto): Promise<Ticket> {
+    try {
+      TicketsValidator.validateCreateDto(
+        ticket,
+        this.usersRepository,
+        this.tickeTypesRepository,
+      );
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+    const ticketType = await this.tickeTypesRepository.findOneBy({
+      id: ticket.ticketTypeID,
+    });
+    ticket.entriesLeft = ticketType.maxEntries;
+    return await this.ticketsRepository.save(ticket);
+  }
+  async findCustomerTickets(params: ListTicketsDto): Promise<Ticket[]> {
+    return await this.ticketsRepository.find({
+      take: params.limit || 10,
+      skip: (params.page - 1) * params.limit || 0,
+    });
+  }
+
+  async findCustomerTicket(ticketId: number): Promise<Ticket> {
+    const ticket = await this.ticketsRepository.findOneBy({ id: ticketId });
+    if (!ticket) {
+      throw new NotFoundException(`Ticket #${ticketId} not found`);
+    }
+    return ticket;
+  }
+
+  async updateTicket(
+    userID: number,
+    ticketID: number,
+    updates: UpdateTicketDto,
+  ): Promise<Ticket> {
+    await this.findOne(ticketID);
+    try {
+      await this.findOne(ticketID);
+    } catch (e) {
+      throw new NotFoundException('Ticket not found');
+    }
+    try {
+      TicketsValidator.validateUpdateDto(updates);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+
+    await this.ticketsRepository.update(ticketID, updates);
+    return await this.ticketsRepository.findOneBy({ id: ticketID });
+  }
+
+  async removeTicket(userID: number, ticketID: number): Promise<Ticket> {
+    const ticket = await this.ticketsRepository.findOneBy({ id: ticketID });
+    if (!ticket) {
+      throw new NotFoundException(`Ticket #${ticketID} not found`);
+    }
+    await this.ticketsRepository.delete({ id: ticketID });
+    return ticket;
   }
 }

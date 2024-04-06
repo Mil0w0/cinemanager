@@ -9,7 +9,7 @@ import {
   Patch,
   SetMetadata,
 } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ListAllEntities } from './dto/list-users.dto';
@@ -19,11 +19,16 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { LogoutUserDto } from './dto/logout-user.dto';
 import { Role } from '../roles/roles.enum';
 import { Roles } from '../roles/roles.decorator';
+import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
+import { Ticket } from '../tickets/ticket.entity';
+import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
+import { UpdateTicketDto } from '../tickets/dto/update-ticket.dto';
 export const CAN_SKIP_AUTH_KEY = 'isPublic';
 export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
 
 @ApiTags('Users')
 @Controller('users')
+@ApiBearerAuth('JWT-auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post('register')
@@ -125,5 +130,73 @@ export class UsersController {
   })
   async remove(@Param('id') id: number): Promise<User> {
     return this.usersService.remove(id);
+  }
+
+  @Post('tickets')
+  @ApiResponse({
+    status: 201,
+    description: 'The ticket has been successfully bought.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Ticket type or user not found',
+  })
+  async buyTicket(@Body() createTicketDTO: CreateTicketDto): Promise<Ticket> {
+    return this.usersService.buyTicket(createTicketDTO);
+  }
+
+  @Get(':userID/tickets')
+  @ApiResponse({
+    status: 200,
+    description: 'The tickets have been successfully fetched.',
+  })
+  async findTickets(@Query() query: ListTicketsDto): Promise<Ticket[]> {
+    return this.usersService.findCustomerTickets(query);
+  }
+
+  @Get('tickets/:ticketId')
+  @ApiResponse({
+    status: 200,
+    description: 'The ticket has been successfully fetched.',
+  })
+  async findTicket(@Param('ticketId') ticketId: number): Promise<Ticket> {
+    return this.usersService.findCustomerTicket(ticketId);
+  }
+
+  @Patch(':userID/tickets/:ticketId')
+  @ApiResponse({
+    status: 200,
+    description: 'The ticket has been successfully updated.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  async updateTicket(
+    @Param('ticketId') ticketId: number,
+    @Param('userID') userID: number,
+    @Body() updateTicketDto: UpdateTicketDto,
+  ): Promise<Ticket> {
+    return this.usersService.updateTicket(userID, ticketId, updateTicketDto);
+  }
+
+  @Delete(':userID/tickets/:ticketId')
+  @ApiResponse({
+    status: 200,
+    description: 'The ticket has been successfully deleted.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Ticket not found',
+  })
+  async removeTicket(
+    @Param('ticketId') ticketId: number,
+    @Param('userID') userID: number,
+  ): Promise<Ticket> {
+    return this.usersService.removeTicket(userID, ticketId);
   }
 }
