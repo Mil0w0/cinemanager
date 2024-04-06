@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IsBoolean, IsDate, IsPositive, IsString } from 'class-validator';
+import { IsBoolean, IsPositive, IsString } from 'class-validator';
 
 export class CreateRoomDto {
   @ApiProperty({
@@ -38,9 +38,9 @@ export class CreateRoomDto {
   @IsBoolean()
   hasDisabledAccess: boolean;
 
-    @ApiProperty({
-        example: 'IMAX',
-        required: true,
-    })
+  @ApiProperty({
+    example: 'IMAX',
+    required: true,
+  })
   type: string;
 }

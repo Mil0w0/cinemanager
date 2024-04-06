@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ScreeningsService } from './screenings.service';
 import { CreateScreeningDto } from './dto/create-screening.dto';
-import { ListAllEntities } from './dto/list-screening.dto';
+import { ListScreeningParams } from './dto/list-screening.dto';
 import { UpdateScreeningDto } from './dto/update-screening.dto';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
@@ -43,10 +43,14 @@ export class ScreeningsController {
   @Get()
   @ApiResponse({
     status: 200,
-    description: 'The movies has been successfully fetched.',
+    description: 'The screenings has been successfully fetched.',
   })
-  async findAll(@Query() query: ListAllEntities): Promise<Screening[]> {
-    return this.moviesService.findAll(query.limit, query.page);
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  async findAll(@Query() query: ListScreeningParams): Promise<Screening[]> {
+    return this.moviesService.findAll(query);
   }
 
   @Get(':id')

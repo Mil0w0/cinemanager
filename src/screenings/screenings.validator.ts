@@ -1,19 +1,20 @@
-import { ListAllEntities } from './dto/list-screening.dto';
+import { ListScreeningParams } from './dto/list-screening.dto';
 import { BadRequestException } from '@nestjs/common';
 import { Screening } from './screening.entity';
 import { CreateScreeningDto } from './dto/create-screening.dto';
 import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/room.entity';
+import { UpdateScreeningDto } from './dto/update-screening.dto';
 
 const MINIMUM_SCREENING_EXTRA_DURATION = 30;
 const CINEMA_OPENING_HOUR = 8;
 const CINEMA_CLOSING_HOUR = 22;
 export class ScreeningValidator {
   static validateCreateScreeningDto(createSCreeningDto) {
-    if (!createSCreeningDto.movie) {
+    if (!createSCreeningDto.movieID) {
       throw new Error('Movie ID is required');
     }
-    if (!createSCreeningDto.room) {
+    if (!createSCreeningDto.roomID) {
       throw new Error('Room ID is required');
     }
     if (!createSCreeningDto.duration) {
@@ -25,11 +26,16 @@ export class ScreeningValidator {
   }
 
   static validateTimeAndDuration(
-    screening: CreateScreeningDto,
+    screening: CreateScreeningDto | UpdateScreeningDto,
     movie: Movie,
     room: Room,
     roomScreenings: Screening[],
   ) {
+    if (room.isAvailable === false) {
+      throw new BadRequestException(
+        `Room ${room.id} is not available (in maintenance)`,
+      );
+    }
     if (
       movie.duration + MINIMUM_SCREENING_EXTRA_DURATION >
       screening.duration
@@ -42,7 +48,7 @@ export class ScreeningValidator {
   }
 
   private static validateStartingTime(
-    createSCreeningDto: CreateScreeningDto,
+    createSCreeningDto: CreateScreeningDto | UpdateScreeningDto,
     room: Room,
     roomScreenings: Screening[],
   ): void {
@@ -87,7 +93,34 @@ export class ScreeningValidator {
     }
   }
 
-  static validateListEntities(listAllEntities: ListAllEntities) {
+  static validateUpdateTimeAndDuration(
+    movie: Movie,
+    room: Room,
+    updates: UpdateScreeningDto,
+    roomScreenings: Screening[],
+  ) {
+    if (!updates.movieID) {
+      throw new Error('Movie ID is required');
+    }
+    if (!updates.roomID) {
+      throw new Error('Room ID is required');
+    }
+    if (room.isAvailable === false) {
+      throw new BadRequestException(
+        `Room ${room.id} is not available (in maintenance)`,
+      );
+    }
+    if (updates.duration || updates.startingTime) {
+      try {
+        this.validateTimeAndDuration(updates, movie, room, roomScreenings);
+        this.validateStartingTime(updates, room, roomScreenings);
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
+    }
+  }
+
+  static validateListEntities(listAllEntities: ListScreeningParams) {
     if (listAllEntities.page <= 0) {
       throw new Error('Page must be greater than 0');
     }

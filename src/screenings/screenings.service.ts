@@ -11,6 +11,7 @@ import { UpdateScreeningDto } from './dto/update-screening.dto';
 import { ScreeningValidator } from './screenings.validator';
 import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/room.entity';
+import { ListScreeningParams } from './dto/list-screening.dto';
 
 @Injectable()
 export class ScreeningsService {
@@ -62,27 +63,80 @@ export class ScreeningsService {
   }
 
   async update(id: number, updates: UpdateScreeningDto): Promise<Screening> {
-    await this.findOne(id);
-    if (updates.duration) {
-      const otherScreening = await this.screeningsRepository.findOneBy({
-        duration: updates.duration,
+    const screening = await this.findOne(id);
+    if (screening) {
+      const movie: Movie = await this.moviesRepository.findOneBy({
+        id: updates.movieID,
       });
-      if (otherScreening) {
-        throw new BadRequestException(
-          `Screening at ${updates.duration} already exists`,
-        );
+      const room: Room = await this.roomsRepository.findOneBy({
+        id: updates.roomID,
+      });
+      const roomScreenings: Screening[] = await this.screeningsRepository.find({
+        where: { room },
+      });
+
+      try {
+        if (movie && room) {
+          ScreeningValidator.validateUpdateTimeAndDuration(
+            movie,
+            room,
+            updates,
+            roomScreenings,
+          );
+        }
+      } catch (error) {
+        throw new BadRequestException(error.message);
       }
+      // TODO : fix this ?
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { movieID, roomID, ...rest } = updates;
+
+      await this.screeningsRepository.save({ ...screening, ...rest });
+      return await this.screeningsRepository.findOneBy({ id });
     }
-    await this.screeningsRepository.update(id, updates);
-    return await this.screeningsRepository.findOneBy({ id });
+    throw new NotFoundException(`Screening #${id} not found`);
   }
 
-  async findAll(limit?: number, page?: number): Promise<Screening[]> {
-    return await this.screeningsRepository.find({
-      take: limit || 10,
-      skip: (page - 1) * limit || 0,
-      relations: ['movie', 'room'],
+  async findAll(params: ListScreeningParams): Promise<Screening[]> {
+    const queryBuilder =
+      this.screeningsRepository.createQueryBuilder('screening');
+
+    queryBuilder.where('room.isAvailable = :isAvailable', {
+      isAvailable: true,
     });
+
+    if (params.to && params.from) {
+      queryBuilder.where('screening.startingTime BETWEEN :from AND :to', {
+        from: params.from,
+        to: params.to,
+      });
+    } else if (params.to) {
+      queryBuilder.where('screening.startingTime <= :to', {
+        to: params.to,
+      });
+    } else if (params.from) {
+      queryBuilder.where('screening.startingTime >= :from', {
+        from: params.from,
+      });
+    }
+
+    if (params.movieID) {
+      queryBuilder.andWhere('screening.movie.id = :movieID', {
+        movieID: params.movieID,
+      });
+    }
+    if (params.roomID) {
+      queryBuilder.andWhere('screening.room.id = :roomID', {
+        roomID: params.roomID,
+      });
+    }
+    queryBuilder
+      .innerJoinAndSelect('screening.movie', 'movie')
+      .innerJoinAndSelect('screening.room', 'room')
+      .take(params.limit || 10)
+      .skip((params.page - 1) * params.limit || 0);
+
+    return await queryBuilder.getMany();
   }
 
   async findOne(id: number): Promise<Screening> {
