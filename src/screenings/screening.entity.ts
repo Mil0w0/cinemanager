@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+} from 'typeorm';
 import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/room.entity';
+import { Ticket } from '../tickets/ticket.entity';
 
 @Entity()
 export class Screening {
@@ -13,14 +20,12 @@ export class Screening {
   @Column()
   startingTime: Date;
 
-  @Column({
-    default: 0,
-  })
-  entries: number;
-
   @ManyToOne(() => Movie, (movie: Movie) => movie.screenings)
   movie: Movie;
 
   @ManyToOne(() => Room, (room: Room) => room.screenings)
   room: Room;
+
+  @ManyToMany(() => Ticket, (ticket: Ticket) => ticket.screenings)
+  tickets: Ticket[];
 }

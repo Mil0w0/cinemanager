@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { TicketType } from '../ticketTypes/ticketType.entity';
+import { Ticket } from '../tickets/ticket.entity';
 
 @Entity()
 export class User {
@@ -31,4 +39,7 @@ export class User {
     default: 'user',
   })
   roles: string;
+
+  @OneToMany(() => Ticket, (ticket: Ticket) => ticket.user)
+  tickets: Ticket[];
 }

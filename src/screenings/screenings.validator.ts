@@ -6,9 +6,9 @@ import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/room.entity';
 import { UpdateScreeningDto } from './dto/update-screening.dto';
 
-const MINIMUM_SCREENING_EXTRA_DURATION = 30;
-const CINEMA_OPENING_HOUR = 8;
-const CINEMA_CLOSING_HOUR = 22;
+const MINIMUM_SCREENING_EXTRA_DURATION: number = 30;
+const CINEMA_OPENING_HOUR: number = 8;
+const CINEMA_CLOSING_HOUR: number = 22;
 export class ScreeningValidator {
   static validateCreateScreeningDto(createSCreeningDto) {
     if (!createSCreeningDto.movieID) {

@@ -20,6 +20,12 @@ import { RolesGuard } from './roles/roles.guard';
 import { Screening } from './screenings/screening.entity';
 import { ScreeningsController } from './screenings/screenings.controller';
 import { ScreeningsService } from './screenings/screenings.service';
+import { Ticket } from './tickets/ticket.entity';
+import { TicketType } from './ticketTypes/ticketType.entity';
+import { TicketsController } from './tickets/tickets.controller';
+import { TicketTypesController } from './ticketTypes/ticketTypes.controller';
+import { TicketsService } from './tickets/tickets.service';
+import { TicketTypesService } from './ticketTypes/ticketTypes.service';
 
 @Module({
   imports: [
@@ -31,10 +37,18 @@ import { ScreeningsService } from './screenings/screenings.service';
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Movie, Room, Picture, User, Screening],
+      entities: [Movie, Room, Picture, User, Screening, Ticket, TicketType],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Movie, Room, Picture, User, Screening]),
+    TypeOrmModule.forFeature([
+      Movie,
+      Room,
+      Picture,
+      User,
+      Screening,
+      Ticket,
+      TicketType,
+    ]),
   ],
   controllers: [
     AppController,
@@ -42,6 +56,8 @@ import { ScreeningsService } from './screenings/screenings.service';
     RoomsController,
     UsersController,
     ScreeningsController,
+    TicketsController,
+    TicketTypesController,
   ],
   providers: [
     {
@@ -57,6 +73,8 @@ import { ScreeningsService } from './screenings/screenings.service';
     RoomsService,
     UsersService,
     ScreeningsService,
+    TicketsService,
+    TicketTypesService,
   ],
 })
 export class AppModule {}
