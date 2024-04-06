@@ -46,7 +46,7 @@ export class MoviesController {
     description: 'The movies has been successfully fetched.',
   })
   async findAll(@Query() query: ListAllEntities): Promise<Movie[]> {
-    return this.moviesService.findAll(query.limit, query.page);
+    return this.moviesService.findAll(query);
   }
 
   @Get(':id')

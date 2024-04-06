@@ -116,11 +116,10 @@ export class UsersService {
     return await this.usersRepository.findOneBy({ id });
   }
 
-  async findAll(limit: number, page: number): Promise<User[]> {
-    //TODO: Validate the page number : 500 when page is 0 atm
+  async findAll(limit?: number, page?: number): Promise<User[]> {
     return await this.usersRepository.find({
-      take: limit,
-      skip: (page - 1) * limit,
+      take: limit || 10,
+      skip: (page - 1) * limit || 0,
     });
   }
 

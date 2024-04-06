@@ -77,8 +77,7 @@ export class ScreeningsService {
     return await this.screeningsRepository.findOneBy({ id });
   }
 
-  async findAll(limit: number, page: number): Promise<Screening[]> {
-    //TODO: Validate the page number : 500 when page is 0 atm and total COunt ?
+  async findAll(limit?: number, page?: number): Promise<Screening[]> {
     return await this.screeningsRepository.find({
       take: limit || 10,
       skip: (page - 1) * limit || 0,

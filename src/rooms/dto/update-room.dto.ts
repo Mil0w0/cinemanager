@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsPositive, IsString } from 'class-validator';
+import { IsBoolean, IsPositive, IsString } from 'class-validator';
 
 export class UpdateRoomDto {
   @IsString()
@@ -15,4 +15,7 @@ export class UpdateRoomDto {
 
   @IsBoolean()
   hasDisabledAccess?: boolean;
+
+  @IsString()
+  type?: string;
 }

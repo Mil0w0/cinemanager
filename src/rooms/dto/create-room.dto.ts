@@ -37,4 +37,10 @@ export class CreateRoomDto {
   })
   @IsBoolean()
   hasDisabledAccess: boolean;
+
+    @ApiProperty({
+        example: 'IMAX',
+        required: true,
+    })
+  type: string;
 }

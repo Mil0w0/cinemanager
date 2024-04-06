@@ -52,12 +52,21 @@ export class RoomsService {
         throw new BadRequestException(`Room ${updates.name} already exists`);
       }
     }
+    try {
+      RoomValidator.validateUpdateRoomDto(updates);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+
     await this.roomsRepository.update(id, updates);
     return await this.roomsRepository.findOneBy({ id });
   }
 
-  async findAll(limit: number): Promise<Room[]> {
-    return await this.roomsRepository.find({ take: limit });
+  async findAll(limit?: number, page?: number): Promise<Room[]> {
+    return await this.roomsRepository.find({
+      take: limit || 10,
+      skip: (page - 1) * limit || 0,
+    });
   }
 
   async findOne(id: number): Promise<Room> {

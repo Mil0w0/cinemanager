@@ -5,10 +5,10 @@ export class ListAllEntities {
     example: '10',
     required: false,
   })
-  limit: number = 10;
+  limit?: number = 10;
   @ApiProperty({
     example: '1',
     required: false,
   })
-  page: number = 1;
+  page?: number = 1;
 }

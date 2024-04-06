@@ -65,6 +65,12 @@ export class RoomsController {
 
   @Post(':id/images')
   @Roles(Role.Admin)
+  @ApiResponse({ status: 403, description: 'Forbidden access.' })
+  @ApiResponse({ status: 201, description: 'Successfully uploaded picture' })
+  @ApiBody({
+    type: CreatePictureDto,
+    description: 'Json structure for picture object',
+  })
   async uploadPicture(
     @Param('id') id: number,
     @Body() createPictureDto: CreatePictureDto,

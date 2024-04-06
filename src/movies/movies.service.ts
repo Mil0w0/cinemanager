@@ -53,11 +53,10 @@ export class MoviesService {
     return await this.moviesRepository.findOneBy({ id });
   }
 
-  async findAll(limit: number, page: number): Promise<Movie[]> {
-    //TODO: Validate the page number : 500 when page is 0 atm and total COunt ?
+  async findAll(listDto: ListAllEntities): Promise<Movie[]> {
     return await this.moviesRepository.find({
-      take: limit,
-      skip: (page - 1) * limit,
+      take: listDto.limit || 10,
+      skip: (listDto.page - 1) * listDto.limit || 0,
     });
   }
 

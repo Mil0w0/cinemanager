@@ -19,4 +19,10 @@ export class RoomValidator {
       throw new Error('hasDisabledAccess is required');
     }
   }
+
+  static validateUpdateRoomDto(updateRoomDto) {
+    if (updateRoomDto.maxCapacity && (updateRoomDto.maxCapacity < 15 || updateRoomDto.maxCapacity > 30)) {
+      throw new Error('maxCapacity must be greater than 15 and less than 30');
+    }
+  }
 }
