@@ -3,17 +3,37 @@
     This API allows the management of a cinema. You can get all the informations and doc about endpoint with Swagger at 
     localhost:3000/api
 
-## Installing the app
-    Run cp .env.exemple  .env and modify it
-    Run docker-compose up
-    Run `npm install` at the root 
-    Run `npm run start`
+## Installation
 
-    The app is accessible at localhost:3000/
-    The phpmyadmin is accessible at localhost:8080/
+1. Clone the repository and navigate to the project directory.
+2. Copy the environment configuration file template:
+    ```bash
+    cp .env.example .env
+    ```
+   Edit the `.env` file to match your environment settings.
 
+3. Start the Docker containers:
+    ```bash
+    docker-compose up
+    ```
+
+4. Install the necessary Node.js dependencies:
+    ```bash
+    npm install
+    ```
+
+5. Start the application:
+    ```bash
+    npm run start
+    ```
+
+   **Access Points:**
+
+   - Application URL: `http://localhost:3000/`
+   - phpMyAdmin: `http://localhost:8080/`
+   
 ## Testing the app (POSTMAN)
-    A postman collection json file is at the root.
+   A postman collection json file is at the root.
 
 ## About the app
    You have to authenticate to use the API.

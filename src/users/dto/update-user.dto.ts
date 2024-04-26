@@ -24,6 +24,12 @@ export class UpdateUserDto {
   birthDate?: Date;
 
   @ApiProperty({
+    example: '100',
+    required: false,
+  })
+  balance?: number;
+
+  @ApiProperty({
     example: 'nplhch@myges.fr',
     required: false,
   })

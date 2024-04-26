@@ -28,6 +28,9 @@ export class UsersValidator {
     if (createUserDto.password.length < 8) {
       throw new Error('8 characters minimum required for password.');
     }
+    if (!createUserDto.balance) {
+      createUserDto.balance = 0;
+    }
     if (!createUserDto.roles) {
       createUserDto.roles = 'user';
     } else if (

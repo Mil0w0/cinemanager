@@ -14,6 +14,9 @@ export class TicketsValidator {
     if (!createTicketDto.userID) {
       throw new Error('User ID is required');
     }
+    if (!createTicketDto.price) {
+      throw new Error('Price is required');
+    }
     if (!createTicketDto.entriesLeft) {
       throw new Error('Entries left is required');
     }

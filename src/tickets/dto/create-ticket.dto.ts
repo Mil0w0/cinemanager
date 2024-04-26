@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IsDate, IsPositive, IsString } from 'class-validator';
-
 export class CreateTicketDto {
   @ApiProperty({
     example: '1',
@@ -14,6 +12,18 @@ export class CreateTicketDto {
     required: true,
   })
   userID: number;
+
+  @ApiProperty({
+    example: '2021-05-01',
+    required: false,
+  })
+  buyDate: Date;
+
+  @ApiProperty({
+    example: '7,99',
+    required: true,
+  })
+  price: number;
 
   @ApiProperty({
     example: '1',

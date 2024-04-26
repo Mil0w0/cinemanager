@@ -1,10 +1,10 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
+  Entity,
   ManyToMany,
-  OneToMany,
   ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Screening } from '../screenings/screening.entity';
 import { User } from '../users/user.entity';
@@ -17,6 +17,12 @@ export class Ticket {
 
   @Column()
   entriesLeft: number;
+
+  @Column()
+  price: number;
+
+  @Column()
+  buyDate: Date;
 
   @ManyToOne(() => TicketType, (ticketType: TicketType) => ticketType.tickets)
   ticketType: TicketType;

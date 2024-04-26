@@ -1,15 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { hash, compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { sign } from 'jsonwebtoken';
 import { LogoutUserDto } from './dto/logout-user.dto';
@@ -30,7 +25,8 @@ export class UsersService {
     private ticketsRepository: Repository<Ticket>,
     @InjectRepository(TicketType)
     private tickeTypesRepository: Repository<TicketType>,
-  ) {}
+  ) {
+  }
 
   async create(user: CreateUserDto): Promise<User> {
     try {
@@ -112,6 +108,7 @@ export class UsersService {
       message: 'User successfully logged out',
     };
   }
+
   async update(id: number, params: UpdateUserDto): Promise<User> {
     await this.findOne(id);
     if (params.email) {
@@ -164,6 +161,7 @@ export class UsersService {
     ticket.entriesLeft = ticketType.maxEntries;
     return await this.ticketsRepository.save(ticket);
   }
+
   async findCustomerTickets(params: ListTicketsDto): Promise<Ticket[]> {
     return await this.ticketsRepository.find({
       take: params.limit || 10,

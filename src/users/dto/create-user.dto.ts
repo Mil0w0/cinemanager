@@ -25,6 +25,12 @@ export class CreateUserDto {
   birthDate: Date;
 
   @ApiProperty({
+    example: '100',
+    required: true,
+  })
+  balance: number;
+
+  @ApiProperty({
     example: 'nplhch@myges.fr',
     required: true,
   })
