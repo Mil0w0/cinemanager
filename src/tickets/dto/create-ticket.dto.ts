@@ -20,7 +20,7 @@ export class CreateTicketDto {
   buyDate: Date;
 
   @ApiProperty({
-    example: '7,99',
+    example: '7.99',
     required: true,
   })
   price: number;

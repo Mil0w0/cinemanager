@@ -147,7 +147,7 @@ export class UsersService {
   //TODO: only user connected can buy a ticket for themselves
   async buyTicket(ticket: CreateTicketDto): Promise<Ticket> {
     try {
-      TicketsValidator.validateCreateDto(
+      await TicketsValidator.validateCreateDto(
         ticket,
         this.usersRepository,
         this.tickeTypesRepository,
@@ -159,6 +159,11 @@ export class UsersService {
       id: ticket.ticketTypeID,
     });
     ticket.entriesLeft = ticketType.maxEntries;
+    // change the balance of the user with the price of the ticket deduced
+    const user = await this.usersRepository.findOneBy({ id: ticket.userID });
+    await this.usersRepository.update(ticket.userID, {
+      balance: user.balance - ticket.price,
+    });
     return await this.ticketsRepository.save(ticket);
   }
 
