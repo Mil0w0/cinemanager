@@ -97,7 +97,8 @@ export class UsersController {
     return this.usersService.findAll(query.limit, query.page);
   }
 
-  @Get(':id')
+  @Get(':userId')
+  @Roles(Role.CurrentUser)
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully fetched.',
