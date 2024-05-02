@@ -32,7 +32,9 @@ export class TicketsValidator {
       throw new Error('Ticket type not found');
     }
     //get the user then check if the user as the necessary balance
-    const user = await usersRepository.findOneBy({ id: createTicketDto.userID });
+    const user = await usersRepository.findOneBy({
+      id: createTicketDto.userID,
+    });
     if (user.balance < createTicketDto.price) {
       throw new Error('User does not have enough balance');
     }

@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/room.entity';
@@ -27,5 +28,6 @@ export class Screening {
   room: Room;
 
   @ManyToMany(() => Ticket, (ticket: Ticket) => ticket.screenings)
+  @JoinTable()
   tickets: Ticket[];
 }

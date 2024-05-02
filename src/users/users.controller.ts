@@ -22,7 +22,10 @@ import { Roles } from '../roles/roles.decorator';
 import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
 import { Ticket } from '../tickets/ticket.entity';
 import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
-import { UpdateTicketDto } from '../tickets/dto/update-ticket.dto';
+import {
+  UpdateTicketDto,
+  UpdateTicketScreeningDTO,
+} from '../tickets/dto/update-ticket.dto';
 export const CAN_SKIP_AUTH_KEY = 'isPublic';
 export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
 
@@ -182,6 +185,23 @@ export class UsersController {
     @Body() updateTicketDto: UpdateTicketDto,
   ): Promise<Ticket> {
     return this.usersService.updateTicket(userID, ticketId, updateTicketDto);
+  }
+
+  @Patch(':userID/screenings/:screeningId')
+  @ApiResponse({
+    status: 200,
+    description: 'The ticket has been successfully used for this screening.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  async bookScreening(
+    @Param('userID') userID: number,
+    @Param('screeningId') screeningId: number,
+    @Body() ticket: UpdateTicketScreeningDTO,
+  ): Promise<Ticket> {
+    return this.usersService.bookScreening(userID, screeningId, ticket);
   }
 
   @Delete(':userID/tickets/:ticketId')

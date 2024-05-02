@@ -1,4 +1,3 @@
-import { IsDate, IsPositive, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateTicketDto {
@@ -7,10 +6,11 @@ export class UpdateTicketDto {
     required: false,
   })
   entriesLeft?: number;
-
+}
+export class UpdateTicketScreeningDTO {
   @ApiProperty({
     example: '1',
     required: false,
   })
-  screeningIDS?: number[];
+  ticketID: number;
 }

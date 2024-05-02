@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -14,7 +19,11 @@ import { TicketType } from '../ticketTypes/ticketType.entity';
 import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
 import { TicketsValidator } from '../tickets/tickets.validator';
 import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
-import { UpdateTicketDto } from '../tickets/dto/update-ticket.dto';
+import {
+  UpdateTicketDto,
+  UpdateTicketScreeningDTO,
+} from '../tickets/dto/update-ticket.dto';
+import { Screening } from '../screenings/screening.entity';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +34,9 @@ export class UsersService {
     private ticketsRepository: Repository<Ticket>,
     @InjectRepository(TicketType)
     private tickeTypesRepository: Repository<TicketType>,
-  ) {
-  }
+    @InjectRepository(Screening)
+    private screeningsRepository: Repository<Screening>,
+  ) {}
 
   async create(user: CreateUserDto): Promise<User> {
     try {
@@ -171,6 +181,9 @@ export class UsersService {
     return await this.ticketsRepository.find({
       take: params.limit || 10,
       skip: (params.page - 1) * params.limit || 0,
+      relations: {
+        screenings: true,
+      },
     });
   }
 
@@ -187,9 +200,8 @@ export class UsersService {
     ticketID: number,
     updates: UpdateTicketDto,
   ): Promise<Ticket> {
-    await this.findOne(ticketID);
     try {
-      await this.findOne(ticketID);
+      await this.ticketsRepository.findOneBy({ id: ticketID });
     } catch (e) {
       throw new NotFoundException('Ticket not found');
     }
@@ -209,6 +221,43 @@ export class UsersService {
       throw new NotFoundException(`Ticket #${ticketID} not found`);
     }
     await this.ticketsRepository.delete({ id: ticketID });
+    return ticket;
+  }
+
+  async bookScreening(
+    userID: number,
+    screeningID: number,
+    body: UpdateTicketScreeningDTO,
+  ): Promise<Ticket> {
+    //UPDATE TICKET WITH SCREENING INFO
+
+    await this.findOne(userID);
+    const ticket: Ticket = await this.ticketsRepository.findOneBy({
+      id: body.ticketID,
+    });
+    if (!ticket) {
+      throw new NotFoundException('Ticket not found');
+    }
+    if (ticket.entriesLeft <= 0) {
+      throw new BadRequestException('No entries left for this ticket');
+    }
+    const screening: Screening = await this.screeningsRepository.findOneBy({
+      id: screeningID,
+    });
+    if (!screening) {
+      throw new NotFoundException('Screening not found');
+    }
+
+    const ticketScreenings: Screening[] = await this.screeningsRepository
+      .createQueryBuilder('screening')
+      .innerJoin('screening.tickets', 'ticket')
+      .where('ticket.id = :ticketId', { ticketId: body.ticketID })
+      .getMany();
+
+    console.log(ticketScreenings);
+    ticket.screenings = [...ticketScreenings, screening]; //this is so good i love js
+    ticket.entriesLeft -= 1;
+    await this.ticketsRepository.save(ticket);
     return ticket;
   }
 }
