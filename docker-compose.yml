@@ -1,14 +1,14 @@
 version: '3.8'
 services:
   mysql-db:
-    image: mysql:latest
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_USER: ${DATABASE_USERNAME}
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-    ports:
-      - "${HOST_DB_PORT}:3306"
+#    ports:
+#      - "${HOST_DB_PORT}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     restart: unless-stopped
@@ -16,11 +16,24 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     ports:
-      - "8080:80"
+      - "8888:80"
     depends_on:
       - mysql-db
     environment:
       - PMA_HOST=mysql-db
+  cinemanager-api:
+    build: .
+    ports:
+      - "4000:3000"
+    depends_on:
+      - mysql-db
+    environment:
+      DATABASE_HOST: mysql-db
+      DATABASE_PORT: 3306
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    restart: unless-stopped
 volumes:
   mysql-data:
     driver: local

@@ -32,7 +32,7 @@ import { Transaction } from './transaction/trasaction.entity';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'mysql-db',
       port: parseInt(process.env.HOST_DB_PORT),
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
