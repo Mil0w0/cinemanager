@@ -35,7 +35,14 @@ export class TicketsValidator {
     const user = await usersRepository.findOneBy({
       id: createTicketDto.userID,
     });
-    if (user.balance < createTicketDto.price) {
+    let balance = 0;
+    if (user.transactions && user.transactions.length > 0) {
+      balance = user.transactions.reduce(
+        (acc, transaction) => acc + transaction.amount,
+        0,
+      );
+    }
+    if (balance < createTicketDto.price) {
       throw new Error('User does not have enough balance');
     }
   }

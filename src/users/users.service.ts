@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -19,11 +14,10 @@ import { TicketType } from '../ticketTypes/ticketType.entity';
 import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
 import { TicketsValidator } from '../tickets/tickets.validator';
 import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
-import {
-  UpdateTicketDto,
-  UpdateTicketScreeningDTO,
-} from '../tickets/dto/update-ticket.dto';
+import { UpdateTicketDto, UpdateTicketScreeningDTO } from '../tickets/dto/update-ticket.dto';
 import { Screening } from '../screenings/screening.entity';
+import { Transaction } from '../transaction/trasaction.entity';
+import { CreateTransactionDTO } from '../transaction/dto/createTransactionDTO';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +30,10 @@ export class UsersService {
     private tickeTypesRepository: Repository<TicketType>,
     @InjectRepository(Screening)
     private screeningsRepository: Repository<Screening>,
-  ) {}
+    @InjectRepository(Transaction)
+    private transactionsRepository: Repository<Transaction>,
+  ) {
+  }
 
   async create(user: CreateUserDto): Promise<User> {
     try {
@@ -140,12 +137,22 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
-    const user = await this.usersRepository.findOneBy({ id });
+  async findOne(id: number): Promise<User & { balance: number }> {
+    const user = await this.usersRepository.findOne({
+      where: { id: id },
+      relations: ['transactions'], // Ensure transactions are loaded
+    });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
     }
-    return user;
+    let balance = 0;
+    if (user.transactions && user.transactions.length > 0) {
+      balance = user.transactions.reduce(
+        (acc, transaction) => acc + transaction.amount,
+        0,
+      );
+    }
+    return { ...user, balance };
   }
 
   async remove(id: number): Promise<User> {
@@ -171,9 +178,16 @@ export class UsersService {
     ticket.entriesLeft = ticketType.maxEntries;
     // change the balance of the user with the price of the ticket deduced
     const user = await this.usersRepository.findOneBy({ id: ticket.userID });
-    await this.usersRepository.update(ticket.userID, {
-      balance: user.balance - ticket.price,
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    // Add the ticket price to the user's balance
+    const transaction = this.transactionsRepository.create({
+      user: user,
+      amount: -ticket.price,
+      createdAt: new Date(),
     });
+    await this.transactionsRepository.save(transaction);
     return await this.ticketsRepository.save(ticket);
   }
 
@@ -259,5 +273,21 @@ export class UsersService {
     ticket.entriesLeft -= 1;
     await this.ticketsRepository.save(ticket);
     return ticket;
+  }
+
+  async createTransaction(
+    userId: number,
+    createTransactionDTO: CreateTransactionDTO,
+  ) {
+    const user = await this.usersRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const transaction = this.transactionsRepository.create({
+      user: user,
+      amount: createTransactionDTO.amount,
+      createdAt: new Date(),
+    });
+    return await this.transactionsRepository.save(transaction);
   }
 }

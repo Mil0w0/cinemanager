@@ -26,6 +26,7 @@ import {
   UpdateTicketDto,
   UpdateTicketScreeningDTO,
 } from '../tickets/dto/update-ticket.dto';
+import { CreateTransactionDTO } from '../transaction/dto/createTransactionDTO';
 export const CAN_SKIP_AUTH_KEY = 'isPublic';
 export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
 
@@ -97,8 +98,9 @@ export class UsersController {
     return this.usersService.findAll(query.limit, query.page);
   }
 
+  //fixme should be me or admin
   @Get(':userId')
-  @Roles(Role.CurrentUser)
+  @Roles(Role.Admin)
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully fetched.',
@@ -219,5 +221,21 @@ export class UsersController {
     @Param('userID') userID: number,
   ): Promise<Ticket> {
     return this.usersService.removeTicket(userID, ticketId);
+  }
+
+  @Post(':userID/transactions')
+  @ApiResponse({
+    status: 201,
+    description: 'The transaction has been successfully created.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  async createTransaction(
+    @Param('userID') userID: number,
+    @Body() createTransactionDTO: CreateTransactionDTO,
+  ) {
+    return this.usersService.createTransaction(userID, createTransactionDTO);
   }
 }

@@ -15,7 +15,6 @@ import { RoomsService } from './rooms/rooms.service';
 import { Picture } from './pictures/picture.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.guard';
-import { SetMetadata } from '@nestjs/common';
 import { RolesGuard } from './roles/roles.guard';
 import { Screening } from './screenings/screening.entity';
 import { ScreeningsController } from './screenings/screenings.controller';
@@ -26,6 +25,7 @@ import { TicketsController } from './tickets/tickets.controller';
 import { TicketTypesController } from './ticketTypes/ticketTypes.controller';
 import { TicketsService } from './tickets/tickets.service';
 import { TicketTypesService } from './ticketTypes/ticketTypes.service';
+import { Transaction } from './transaction/trasaction.entity';
 
 @Module({
   imports: [
@@ -37,7 +37,16 @@ import { TicketTypesService } from './ticketTypes/ticketTypes.service';
       username: process.env.DATABASE_ROOT,
       password: process.env.DATABASE_ROOT_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Movie, Room, Picture, User, Screening, Ticket, TicketType],
+      entities: [
+        Movie,
+        Room,
+        Picture,
+        User,
+        Screening,
+        Ticket,
+        TicketType,
+        Transaction,
+      ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
@@ -48,6 +57,7 @@ import { TicketTypesService } from './ticketTypes/ticketTypes.service';
       Screening,
       Ticket,
       TicketType,
+      Transaction,
     ]),
   ],
   controllers: [
@@ -77,4 +87,5 @@ import { TicketTypesService } from './ticketTypes/ticketTypes.service';
     TicketTypesService,
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Ticket } from '../tickets/ticket.entity';
+import { Transaction } from '../transaction/trasaction.entity';
 
 @Entity()
 export class User {
@@ -33,8 +34,12 @@ export class User {
   })
   roles: string;
 
-  @Column()
-  balance: number;
+  @OneToMany(
+    () => Transaction,
+    (transaction: Transaction) => transaction.user,
+    { eager: true },
+  )
+  transactions: Transaction[];
 
   @OneToMany(() => Ticket, (ticket: Ticket) => ticket.user)
   tickets: Ticket[];
