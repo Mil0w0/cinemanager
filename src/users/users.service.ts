@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -14,7 +19,10 @@ import { TicketType } from '../ticketTypes/ticketType.entity';
 import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
 import { TicketsValidator } from '../tickets/tickets.validator';
 import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
-import { UpdateTicketDto, UpdateTicketScreeningDTO } from '../tickets/dto/update-ticket.dto';
+import {
+  UpdateTicketDto,
+  UpdateTicketScreeningDTO,
+} from '../tickets/dto/update-ticket.dto';
 import { Screening } from '../screenings/screening.entity';
 import { Transaction } from '../transaction/trasaction.entity';
 import { CreateTransactionDTO } from '../transaction/dto/createTransactionDTO';
@@ -32,8 +40,7 @@ export class UsersService {
     private screeningsRepository: Repository<Screening>,
     @InjectRepository(Transaction)
     private transactionsRepository: Repository<Transaction>,
-  ) {
-  }
+  ) {}
 
   async create(user: CreateUserDto): Promise<User> {
     try {
@@ -85,7 +92,7 @@ export class UsersService {
         { userId: user.id, email: user.email, roles: user.roles },
         secret,
         {
-          expiresIn: '1w',
+          expiresIn: '2h',
         },
       );
       await this.usersRepository.update(user.id, { loginToken: token });

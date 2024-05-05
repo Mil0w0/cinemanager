@@ -1,32 +1,20 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Patch,
-  SetMetadata,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ListAllEntities } from './dto/list-users.dto';
-import { User } from './user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { LogoutUserDto } from './dto/logout-user.dto';
-import { Role } from '../roles/roles.enum';
-import { Roles } from '../roles/roles.decorator';
-import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
-import { Ticket } from '../tickets/ticket.entity';
-import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
-import {
-  UpdateTicketDto,
-  UpdateTicketScreeningDTO,
-} from '../tickets/dto/update-ticket.dto';
-import { CreateTransactionDTO } from '../transaction/dto/createTransactionDTO';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query, SetMetadata,} from '@nestjs/common';
+import {ApiBearerAuth, ApiBody, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {UsersService} from './users.service';
+import {CreateUserDto} from './dto/create-user.dto';
+import {ListAllEntities} from './dto/list-users.dto';
+import {User} from './user.entity';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {LoginUserDto} from './dto/login-user.dto';
+import {LogoutUserDto} from './dto/logout-user.dto';
+import {Role} from '../roles/roles.enum';
+import {Roles} from '../roles/roles.decorator';
+import {CreateTicketDto} from '../tickets/dto/create-ticket.dto';
+import {Ticket} from '../tickets/ticket.entity';
+import {ListTicketsDto} from '../tickets/dto/list-tickets.dto';
+import {UpdateTicketDto, UpdateTicketScreeningDTO,} from '../tickets/dto/update-ticket.dto';
+import {CreateTransactionDTO} from '../transaction/dto/createTransactionDTO';
+
 export const CAN_SKIP_AUTH_KEY = 'isPublic';
 export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
 
@@ -88,7 +76,7 @@ export class UsersController {
   }
 
   @Get()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   // @UseGuards(JwtAuthGuard) Before making it global this was needed
   @ApiResponse({
     status: 200,
@@ -98,9 +86,9 @@ export class UsersController {
     return this.usersService.findAll(query.limit, query.page);
   }
 
-  //fixme should be me or admin
+
   @Get(':userId')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully fetched.',
@@ -110,6 +98,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully updated.',
@@ -126,6 +115,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',
@@ -138,7 +128,8 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Post('tickets')
+  @Post(':userId/tickets')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 201,
     description: 'The ticket has been successfully bought.',
@@ -155,7 +146,8 @@ export class UsersController {
     return this.usersService.buyTicket(createTicketDTO);
   }
 
-  @Get(':userID/tickets')
+  @Get(':userId/tickets')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The tickets have been successfully fetched.',
@@ -165,6 +157,7 @@ export class UsersController {
   }
 
   @Get('tickets/:ticketId')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The ticket has been successfully fetched.',
@@ -173,7 +166,7 @@ export class UsersController {
     return this.usersService.findCustomerTicket(ticketId);
   }
 
-  @Patch(':userID/tickets/:ticketId')
+  @Patch(':userId/tickets/:ticketId')
   @ApiResponse({
     status: 200,
     description: 'The ticket has been successfully updated.',
@@ -184,13 +177,14 @@ export class UsersController {
   })
   async updateTicket(
     @Param('ticketId') ticketId: number,
-    @Param('userID') userID: number,
+    @Param('userId') userID: number,
     @Body() updateTicketDto: UpdateTicketDto,
   ): Promise<Ticket> {
     return this.usersService.updateTicket(userID, ticketId, updateTicketDto);
   }
 
-  @Patch(':userID/screenings/:screeningId')
+  @Patch(':userId/screenings/:screeningId')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The ticket has been successfully used for this screening.',
@@ -200,14 +194,15 @@ export class UsersController {
     description: 'Bad request',
   })
   async bookScreening(
-    @Param('userID') userID: number,
+    @Param('userId') userID: number,
     @Param('screeningId') screeningId: number,
     @Body() ticket: UpdateTicketScreeningDTO,
   ): Promise<Ticket> {
     return this.usersService.bookScreening(userID, screeningId, ticket);
   }
 
-  @Delete(':userID/tickets/:ticketId')
+  @Delete(':userId/tickets/:ticketId')
+  @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
     description: 'The ticket has been successfully deleted.',
@@ -218,12 +213,13 @@ export class UsersController {
   })
   async removeTicket(
     @Param('ticketId') ticketId: number,
-    @Param('userID') userID: number,
+    @Param('userId') userID: number,
   ): Promise<Ticket> {
     return this.usersService.removeTicket(userID, ticketId);
   }
 
-  @Post(':userID/transactions')
+  @Post(':userId/transactions')
+  @Roles([Role.CurrentUser])
   @ApiResponse({
     status: 201,
     description: 'The transaction has been successfully created.',
@@ -233,7 +229,7 @@ export class UsersController {
     description: 'Bad request',
   })
   async createTransaction(
-    @Param('userID') userID: number,
+    @Param('userId') userID: number,
     @Body() createTransactionDTO: CreateTransactionDTO,
   ) {
     return this.usersService.createTransaction(userID, createTransactionDTO);

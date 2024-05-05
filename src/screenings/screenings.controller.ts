@@ -23,7 +23,7 @@ import { Screening } from './screening.entity';
 export class ScreeningsController {
   constructor(private readonly moviesService: ScreeningsService) {}
   @Post()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The screening has been successfully created.',
@@ -63,7 +63,7 @@ export class ScreeningsController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully updated.',
@@ -80,7 +80,7 @@ export class ScreeningsController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully deleted.',

@@ -23,7 +23,7 @@ import { TicketType } from './ticketType.entity';
 export class TicketTypesController {
   constructor(private readonly ticketTypesService: TicketTypesService) {}
   @Post()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The ticket type has been successfully created.',
@@ -59,7 +59,7 @@ export class TicketTypesController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The ticket type has been successfully updated.',
@@ -76,7 +76,7 @@ export class TicketTypesController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The ticket type has been successfully deleted.',

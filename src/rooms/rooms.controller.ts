@@ -24,7 +24,7 @@ import { Role } from '../roles/roles.enum';
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
   @Post()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The room has been successfully created.',
@@ -49,7 +49,7 @@ export class RoomsController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   async update(
     @Param('id') id: number,
     @Body() updateRoomDto: UpdateRoomDto,
@@ -58,13 +58,13 @@ export class RoomsController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   async remove(@Param('id') id: number): Promise<Room> {
     return this.roomsService.remove(id);
   }
 
   @Post(':id/images')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({ status: 403, description: 'Forbidden access.' })
   @ApiResponse({ status: 201, description: 'Successfully uploaded picture' })
   @ApiBody({
@@ -89,7 +89,7 @@ export class RoomsController {
   }
 
   @Patch(':id/images/:imageId')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   async updatePicture(
     @Param('id') id: number,
     @Param('imageId') imageId: number,
@@ -99,7 +99,7 @@ export class RoomsController {
   }
 
   @Delete(':id/images/:imageId')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   async removePicture(
     @Param('id') id: number,
     @Param('imageId') imageId: number,

@@ -87,5 +87,4 @@ import { Transaction } from './transaction/trasaction.entity';
     TicketTypesService,
   ],
 })
-export class AppModule {
-}
+export class AppModule {}
