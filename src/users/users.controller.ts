@@ -105,11 +105,11 @@ export class UsersController {
     status: 200,
     description: 'The user has been successfully fetched.',
   })
-  async findOne(@Param('id') id: number): Promise<User> {
+  async findOne(@Param('userId') id: number): Promise<User> {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':userId')
   @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
@@ -120,13 +120,13 @@ export class UsersController {
     description: 'Bad request',
   })
   async update(
-    @Param('id') id: number,
+    @Param('userId') id: number,
     @Body() updateMovieDto: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(id, updateMovieDto);
   }
 
-  @Delete(':id')
+  @Delete(':userId')
   @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,
@@ -136,7 +136,7 @@ export class UsersController {
     status: 404,
     description: 'User not found',
   })
-  async remove(@Param('id') id: number): Promise<User> {
+  async remove(@Param('userId') id: number): Promise<User> {
     return this.usersService.remove(id);
   }
 
@@ -168,7 +168,7 @@ export class UsersController {
     return this.usersService.findCustomerTickets(query);
   }
 
-  @Get('tickets/:ticketId')
+  @Get(':userId/tickets/:ticketId')
   @Roles([Role.Admin, Role.CurrentUser])
   @ApiResponse({
     status: 200,

@@ -53,8 +53,8 @@ export class ScreeningsService {
       throw new BadRequestException(error.message);
     }
     try {
-        screening.movie = movie;
-        screening.room = room;
+      screening.movie = movie;
+      screening.room = room;
       return await this.screeningsRepository.save(screening);
     } catch (error) {
       throw new BadRequestException(

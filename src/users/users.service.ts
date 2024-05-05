@@ -250,8 +250,6 @@ export class UsersService {
     screeningID: number,
     body: UpdateTicketScreeningDTO,
   ): Promise<Ticket> {
-    //UPDATE TICKET WITH SCREENING INFO
-
     await this.findOne(userID);
     const ticket: Ticket = await this.ticketsRepository.findOneBy({
       id: body.ticketID,
@@ -275,7 +273,6 @@ export class UsersService {
       .where('ticket.id = :ticketId', { ticketId: body.ticketID })
       .getMany();
 
-    console.log(ticketScreenings);
     ticket.screenings = [...ticketScreenings, screening]; //this is so good i love js
     ticket.entriesLeft -= 1;
     await this.ticketsRepository.save(ticket);

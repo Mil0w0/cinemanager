@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 export class CreateTicketDto {
   @ApiProperty({
     example: '1',

@@ -26,14 +26,12 @@ export class RolesGuard implements CanActivate {
 
     if (requiredRoles.includes(Role.CurrentUser)) {
       const currentUser =
-        parseInt(user.userId) ===
+        user.userId ===
         parseInt(context.switchToHttp().getRequest().params.userId);
       if (currentUser) {
         return true;
       }
     }
-    console.log('user', user);
-    console.log('roles', user.roles);
     return requiredRoles.some((role) => user.roles?.includes(role));
   }
 }
