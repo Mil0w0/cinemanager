@@ -23,7 +23,7 @@ import { Role } from '../roles/roles.enum';
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Post()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The movie has been successfully created.',
@@ -59,7 +59,7 @@ export class MoviesController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully updated.',
@@ -76,7 +76,7 @@ export class MoviesController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully deleted.',

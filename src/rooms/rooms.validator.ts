@@ -12,12 +12,6 @@ export class RoomValidator {
     if (!createRoomDto.description) {
       throw new Error('Description is required');
     }
-    if (!createRoomDto.isAvailable) {
-      throw new Error('isAvailable is required');
-    }
-    if (!createRoomDto.hasDisabledAccess) {
-      throw new Error('hasDisabledAccess is required');
-    }
   }
 
   static validateUpdateRoomDto(updateRoomDto) {

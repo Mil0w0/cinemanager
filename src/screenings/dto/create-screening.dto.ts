@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-
-import { Movie } from '../../movies/movie.entity';
 import { Room } from '../../rooms/room.entity';
+import { Movie } from '../../movies/movie.entity';
 
 export class CreateScreeningDto {
   @ApiProperty({
@@ -25,12 +24,18 @@ export class CreateScreeningDto {
     description: 'Movie id',
     required: true,
   })
-  movieID: number;
+  movieId: number;
 
   @ApiProperty({
     example: '2',
     description: 'Room id',
     required: true,
   })
-  roomID: number;
+  roomId: number;
+
+  @ApiProperty()
+  room: Room;
+
+  @ApiProperty()
+  movie: Movie;
 }

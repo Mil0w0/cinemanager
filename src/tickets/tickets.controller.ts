@@ -12,7 +12,7 @@ import { Role } from '../roles/roles.enum';
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
   @Get()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The tickets have been successfully fetched.',

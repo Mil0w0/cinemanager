@@ -21,9 +21,9 @@ import { Screening } from './screening.entity';
 @Controller('screenings')
 @ApiBearerAuth('JWT-auth')
 export class ScreeningsController {
-  constructor(private readonly moviesService: ScreeningsService) {}
+  constructor(private readonly screeningService: ScreeningsService) {}
   @Post()
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The screening has been successfully created.',
@@ -37,7 +37,7 @@ export class ScreeningsController {
     description: 'Json structure for screening object',
   })
   async create(@Body() createScreeningDTO: CreateScreeningDto) {
-    return this.moviesService.create(createScreeningDTO);
+    return this.screeningService.create(createScreeningDTO);
   }
 
   @Get()
@@ -50,7 +50,7 @@ export class ScreeningsController {
     description: 'Bad request',
   })
   async findAll(@Query() query: ListScreeningParams): Promise<Screening[]> {
-    return this.moviesService.findAll(query);
+    return this.screeningService.findAll(query);
   }
 
   @Get(':id')
@@ -59,11 +59,11 @@ export class ScreeningsController {
     description: 'The movie has been successfully fetched.',
   })
   async findOne(@Param('id') id: number): Promise<Screening> {
-    return this.moviesService.findOne(id);
+    return this.screeningService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully updated.',
@@ -76,11 +76,11 @@ export class ScreeningsController {
     @Param('id') id: number,
     @Body() updateScreeningDto: UpdateScreeningDto,
   ): Promise<Screening> {
-    return this.moviesService.update(id, updateScreeningDto);
+    return this.screeningService.update(id, updateScreeningDto);
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
+  @Roles([Role.Admin])
   @ApiResponse({
     status: 200,
     description: 'The movie has been successfully deleted.',
@@ -90,6 +90,6 @@ export class ScreeningsController {
     description: 'Movie not found',
   })
   async remove(@Param('id') id: number): Promise<Screening> {
-    return this.moviesService.remove(id);
+    return this.screeningService.remove(id);
   }
 }

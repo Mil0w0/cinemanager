@@ -25,6 +25,7 @@ export class ScreeningsService {
   ) {}
 
   async create(screening: CreateScreeningDto): Promise<Screening> {
+    console.log(screening);
     try {
       ScreeningValidator.validateCreateScreeningDto(screening);
     } catch (error) {
@@ -32,28 +33,28 @@ export class ScreeningsService {
     }
 
     const room: Room = await this.roomsRepository.findOneBy({
-      id: screening.roomID,
+      id: screening.roomId,
     });
     const movie: Movie = await this.moviesRepository.findOneBy({
-      id: screening.movieID,
+      id: screening.movieId,
     });
 
     const roomScreenings: Screening[] = await this.screeningsRepository.find({
       where: { room },
     });
     try {
-      if (movie && room) {
-        ScreeningValidator.validateTimeAndDuration(
-          screening,
-          movie,
-          room,
-          roomScreenings,
-        );
-      }
+      ScreeningValidator.validateTimeAndDuration(
+        screening,
+        movie,
+        room,
+        roomScreenings,
+      );
     } catch (error) {
       throw new BadRequestException(error.message);
     }
     try {
+      screening.movie = movie;
+      screening.room = room;
       return await this.screeningsRepository.save(screening);
     } catch (error) {
       throw new BadRequestException(
