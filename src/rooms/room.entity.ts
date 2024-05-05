@@ -16,13 +16,17 @@ export class Room {
   @Column()
   description: string;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isAvailable: boolean;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   hasDisabledAccess: boolean;
 
-  @Column()
+  @Column({ default: 'standard' })
   type: string;
 
   @OneToMany(() => Picture, (picture) => picture.room)

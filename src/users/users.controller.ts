@@ -1,19 +1,32 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Query, SetMetadata,} from '@nestjs/common';
-import {ApiBearerAuth, ApiBody, ApiResponse, ApiTags} from '@nestjs/swagger';
-import {UsersService} from './users.service';
-import {CreateUserDto} from './dto/create-user.dto';
-import {ListAllEntities} from './dto/list-users.dto';
-import {User} from './user.entity';
-import {UpdateUserDto} from './dto/update-user.dto';
-import {LoginUserDto} from './dto/login-user.dto';
-import {LogoutUserDto} from './dto/logout-user.dto';
-import {Role} from '../roles/roles.enum';
-import {Roles} from '../roles/roles.decorator';
-import {CreateTicketDto} from '../tickets/dto/create-ticket.dto';
-import {Ticket} from '../tickets/ticket.entity';
-import {ListTicketsDto} from '../tickets/dto/list-tickets.dto';
-import {UpdateTicketDto, UpdateTicketScreeningDTO,} from '../tickets/dto/update-ticket.dto';
-import {CreateTransactionDTO} from '../transaction/dto/createTransactionDTO';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  SetMetadata,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ListAllEntities } from './dto/list-users.dto';
+import { User } from './user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { LogoutUserDto } from './dto/logout-user.dto';
+import { Role } from '../roles/roles.enum';
+import { Roles } from '../roles/roles.decorator';
+import { CreateTicketDto } from '../tickets/dto/create-ticket.dto';
+import { Ticket } from '../tickets/ticket.entity';
+import { ListTicketsDto } from '../tickets/dto/list-tickets.dto';
+import {
+  UpdateTicketDto,
+  UpdateTicketScreeningDTO,
+} from '../tickets/dto/update-ticket.dto';
+import { CreateTransactionDTO } from '../transaction/dto/createTransactionDTO';
 
 export const CAN_SKIP_AUTH_KEY = 'isPublic';
 export const SkipAuthentication = () => SetMetadata(CAN_SKIP_AUTH_KEY, true);
@@ -85,7 +98,6 @@ export class UsersController {
   async findAll(@Query() query: ListAllEntities): Promise<User[]> {
     return this.usersService.findAll(query.limit, query.page);
   }
-
 
   @Get(':userId')
   @Roles([Role.Admin, Role.CurrentUser])
@@ -219,7 +231,7 @@ export class UsersController {
   }
 
   @Post(':userId/transactions')
-  @Roles([Role.CurrentUser])
+  @Roles([Role.CurrentUser, Role.Admin])
   @ApiResponse({
     status: 201,
     description: 'The transaction has been successfully created.',

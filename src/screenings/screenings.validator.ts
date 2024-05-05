@@ -11,10 +11,10 @@ const CINEMA_OPENING_HOUR: number = 8;
 const CINEMA_CLOSING_HOUR: number = 22;
 export class ScreeningValidator {
   static validateCreateScreeningDto(createSCreeningDto) {
-    if (!createSCreeningDto.movieID) {
+    if (!createSCreeningDto.movieId) {
       throw new Error('Movie ID is required');
     }
-    if (!createSCreeningDto.roomID) {
+    if (!createSCreeningDto.roomId) {
       throw new Error('Room ID is required');
     }
     if (!createSCreeningDto.duration) {
@@ -86,7 +86,7 @@ export class ScreeningValidator {
             screeningEndingDate <= otherScreeningEndingDate)
         ) {
           throw new BadRequestException(
-            `The screening will overlap another one in room ${createSCreeningDto.roomID}`,
+            `The screening will overlap another one in room ${room.id}`,
           );
         }
       });
