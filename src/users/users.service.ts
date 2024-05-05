@@ -147,10 +147,11 @@ export class UsersService {
     }
     let balance = 0;
     if (user.transactions && user.transactions.length > 0) {
-      balance = user.transactions.reduce(
-        (acc, transaction) => acc + transaction.amount,
-        0,
-      );
+      balance = user.transactions.reduce((sum, transaction) => {
+        // Convert the amount from string to number
+        const amount = parseFloat(String(transaction.amount));
+        return sum + amount;
+      }, 0);
     }
     return { ...user, balance };
   }
