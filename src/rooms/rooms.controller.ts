@@ -11,6 +11,7 @@ import {
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { GetAttendancesDto } from './dto/get-attendances.dto';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ListAllEntities } from './dto/list-rooms.dto';
 import { Room } from './room.entity';
@@ -22,7 +23,7 @@ import { Role } from '../roles/roles.enum';
 @ApiBearerAuth('JWT-auth')
 @Controller('rooms')
 export class RoomsController {
-  constructor(private readonly roomsService: RoomsService) {}
+  constructor(private readonly roomsService: RoomsService) { }
   @Post()
   @Roles([Role.Admin])
   @ApiResponse({
@@ -37,6 +38,11 @@ export class RoomsController {
   async create(@Body() createRoomDto: CreateRoomDto) {
     return this.roomsService.create(createRoomDto);
   }
+
+  @Get('attendance')
+  async getAttendances(@Query() query: GetAttendancesDto){
+    return this.roomsService.getAttendances(query.startDate, query.endDate);
+    }
 
   @Get()
   async findAll(@Query() query: ListAllEntities): Promise<Room[]> {
@@ -63,7 +69,7 @@ export class RoomsController {
     return this.roomsService.remove(id);
   }
 
-  @Post(':id/images')
+  @Post(':id/pictures')
   @Roles([Role.Admin])
   @ApiResponse({ status: 403, description: 'Forbidden access.' })
   @ApiResponse({ status: 201, description: 'Successfully uploaded picture' })
@@ -78,32 +84,32 @@ export class RoomsController {
     return this.roomsService.addPicture(id, createPictureDto);
   }
 
-  @Get(':id/images')
+  @Get(':id/pictures')
   async getPictures(@Param('id') id: number) {
     return this.roomsService.findAllPictures(id);
   }
 
-  @Get(':id/images/:imageId')
-  async getPicture(@Param('id') id: number, @Param('imageId') imageId: number) {
-    return this.roomsService.findOnePicture(id, imageId);
+  @Get(':id/pictures/:pictureId')
+  async getPicture(@Param('id') id: number, @Param('pictureId') pictureId: number) {
+    return this.roomsService.findOnePicture(id, pictureId);
   }
 
-  @Patch(':id/images/:imageId')
+  @Patch(':id/pictures/:pictureId')
   @Roles([Role.Admin])
   async updatePicture(
     @Param('id') id: number,
-    @Param('imageId') imageId: number,
+    @Param('pictureId') pictureId: number,
     @Body() updatePictureDto: CreatePictureDto,
   ) {
-    return this.roomsService.updatePicture(id, imageId, updatePictureDto);
+    return this.roomsService.updatePicture(id, pictureId, updatePictureDto);
   }
 
-  @Delete(':id/images/:imageId')
+  @Delete(':id/pictures/:pictureId')
   @Roles([Role.Admin])
   async removePicture(
     @Param('id') id: number,
-    @Param('imageId') imageId: number,
+    @Param('pictureId') pictureId: number,
   ) {
-    return this.roomsService.removePicture(id, imageId);
+    return this.roomsService.removePicture(id, pictureId);
   }
 }
