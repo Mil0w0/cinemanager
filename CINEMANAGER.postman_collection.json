@@ -1,0 +1,1213 @@
+{
+	"info": {
+		"_postman_id": "4fa198bb-8c05-4142-9973-7edd78adc63c",
+		"name": "CINEMANAGER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25867185"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "Login ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User is logged in\", function () {",
+									"   const id = pm.response.json().access_token;",
+									"   pm.collectionVariables.set('token_admin', id);",
+									"   pm.expect(pm.response.json()).to.be.an('object');",
+									"});",
+									"// Stores the loginToken in a collection variable",
+									"var loginToken = pm.response.json().loginToken;",
+									"pm.collectionVariables.set('token_admin', loginToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@myges.fr\",\n  \"password\": \"Respons11\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/login",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User is logged in\", function () {",
+									"   const id = pm.response.json().access_token;",
+									"   pm.collectionVariables.set('token_admin', id);",
+									"   pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"surname\": \"Admin\",\n  \"firstName\": \"Admin2\",\n  \"birthDate\": \"2000-01-01\",\n  \"email\": \"admin2@myges.fr\",\n  \"password\": \"Respons11\",\n  \"roles\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/register",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User is logged in\", function () {",
+									"   const id = pm.response.json().access_token;",
+									"   pm.collectionVariables.set('token_admin', id);",
+									"   pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"surname\": \"User\",\n  \"firstName\": \"Jean\",\n  \"birthDate\": \"2002-02-25\",\n  \"email\": \"jean@myges.fr\",\n  \"password\": \"Respons11\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/register",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User is logged in\", function () {",
+									"   const id = pm.response.json().access_token;",
+									"   pm.collectionVariables.set('token_user', id);",
+									"   pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"loriane@myges.fr\",\n  \"password\": \"Respons11\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/login",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"authToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImVtYWlsIjoibGhAbXlnZXMuZnIiLCJpYXQiOjE3MTE5OTY4MDQsImV4cCI6MTcxMjAwMDQwNH0.J3HTrlMqk21O3c1Y2fqfgcXaXjsa8ftNo9vzXf31wqI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/logout",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SCREENINGS",
+			"item": [
+				{
+					"name": "Get all screenings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/screenings?limit=10&page=1",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"screenings"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all screenings FILTERED",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/screenings?limit=10&page=1&roomID=18",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"screenings"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "to",
+									"value": "",
+									"description": "séance à partir de XX",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "",
+									"description": "séance jusqu'au XX",
+									"disabled": true
+								},
+								{
+									"key": "movieID",
+									"value": "1",
+									"description": "planning du film",
+									"disabled": true
+								},
+								{
+									"key": "roomID",
+									"value": "18"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One screening",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/screenings/27",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"screenings",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CReate screening",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"duration\": 400,\n  \"startingTime\": \"2024-05-9 14:00:00\",\n  \"movieId\": 26,\n  \"roomId\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/screenings",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"screenings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ROOMS",
+			"item": [
+				{
+					"name": "PICTURES",
+					"item": [
+						{
+							"name": "Add picture to room",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"First picture\",\n    \"url\": \"https://secure.server/images/rooms/sideView.png\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "arcadia-solution.com:4000/rooms/12/pictures",
+									"host": [
+										"arcadia-solution",
+										"com"
+									],
+									"port": "4000",
+									"path": [
+										"rooms",
+										"12",
+										"pictures"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Room",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Pixar Room\",\n  \"maxCapacity\": 30,\n  \"description\": \"A room for pixar movies\",\n  \"isAvailable\": true,\n  \"hasDisabledAccess\": true,\n  \"type\": \"pixar\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/rooms",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one room",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/rooms/2",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"rooms",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attendances",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/rooms/attendance?startDate=\"2024-05-10\"&endDate=\"2024-05-14\"",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"rooms",
+								"attendance"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "\"2024-05-10\""
+								},
+								{
+									"key": "endDate",
+									"value": "\"2024-05-14\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get rooms",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/rooms?limit=10",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"rooms"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MOVIES",
+			"item": [
+				{
+					"name": "Get movies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/movies?limit=10&page=1",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Movie Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Le seigneurs des pommes\",\n  \"duration\": 200,\n  \"releaseDate\": \"2002-19-01\",\n  \"category\": \"Science-fiction\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/movies",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Movie User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"HP et la prison d'azkaban\",\n  \"duration\": 189,\n  \"releaseDate\": \"2002-12-08\",\n  \"category\": \"Science-fiction\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/movies",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TICKETS",
+			"item": [
+				{
+					"name": "add money",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/6/transactions",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"6",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buy ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"entriesLeft\": 1,\n    \"userID\": 6,\n    \"buyDate\": \"2023-05-01\",\n    \"price\": 7.99,\n    \"ticketTypeID\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/6/tickets",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"6",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTicketType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"maxEntries\": 99,\n    \"price\": 300,\n    \"name\": \"Billet magique\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/tickets-types",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"tickets-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user tickets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/6/tickets",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"6",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get  tickets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/tickets/",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"tickets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "use ticket on screeniing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ticketID\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/5/screenings/45",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"5",
+								"screenings",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all tickets type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/tickets-types",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"tickets-types"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "Get users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/users?limit=10&page=1",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Loriane\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/4",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users NO AUTH",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/users?limit=10&page=1",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "arcadia-solution.com:4000/users/4",
+							"host": [
+								"arcadia-solution",
+								"com"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token_user}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token_user",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImVtYWlsIjoibmlub0BteWdlcy5mciIsInJvbGVzIjoidXNlciIsImlhdCI6MTcxNTM1MjM2NiwiZXhwIjoxNzE1MzU5NTY2fQ.oD-X7f7yRrlAb8vGubt8jfLoLOVhW0W7PQvy1kC3F5Q"
+		},
+		{
+			"key": "token_admin",
+			"value": ""
+		}
+	]
+}
