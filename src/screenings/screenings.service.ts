@@ -25,7 +25,6 @@ export class ScreeningsService {
   ) {}
 
   async create(screening: CreateScreeningDto): Promise<Screening> {
-    console.log(screening);
     try {
       ScreeningValidator.validateCreateScreeningDto(screening);
     } catch (error) {
@@ -55,6 +54,11 @@ export class ScreeningsService {
     try {
       screening.movie = movie;
       screening.room = room;
+      try {
+        screening.startingTime = new Date(screening.startingTime);
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
       return await this.screeningsRepository.save(screening);
     } catch (error) {
       throw new BadRequestException(
