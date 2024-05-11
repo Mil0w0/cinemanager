@@ -21,6 +21,7 @@ export class TicketsService {
     return await this.ticketsRepository.find({
       take: listDto.limit || 10,
       skip: (listDto.page - 1) * listDto.limit || 0,
+      relations: ['user', 'screenings'],
     });
   }
 }

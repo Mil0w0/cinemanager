@@ -11,10 +11,4 @@ export class ListTicketsDto {
     required: false,
   })
   page?: number;
-
-  @ApiProperty({
-    example: '1',
-    required: false,
-  })
-  userID: number;
 }

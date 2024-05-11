@@ -34,12 +34,13 @@
    
 ## Testing the app (POSTMAN)
    A postman collection json file is at the root.
+   A database dump is also at the root. You can import it via phpMyAdmin.
 
 ## About the app
    You have to authenticate to use the API.
    You can create a user with the endpoint POST /users/register.
    You can login with the endpoint POST /users/login.
-   At the moment, the login token is valid for 1 week because am annoyed to have to reconnect every 1 hour.
+   At the moment, the login token is valid for 2H. You will have to login again after this time.
 
 ### Authors :
     - Loriane HILDERAL

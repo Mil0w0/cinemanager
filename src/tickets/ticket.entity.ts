@@ -3,7 +3,6 @@ import {
   Entity,
   ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Screening } from '../screenings/screening.entity';
@@ -34,6 +33,6 @@ export class Ticket {
   @ManyToMany(() => Screening, (screening: Screening) => screening.tickets)
   screenings: Screening[];
 
-  @OneToMany(() => User, (user: User) => user.tickets)
+  @ManyToOne(() => User, (user: User) => user.tickets)
   user: User;
 }

@@ -170,7 +170,7 @@ export class UsersService {
   }
 
   //TODO: only user connected can buy a ticket for themselves
-  async buyTicket(ticket: CreateTicketDto): Promise<Ticket> {
+  async buyTicket(userID: number, ticket: CreateTicketDto): Promise<Ticket> {
     try {
       await TicketsValidator.validateCreateDto(
         ticket,
@@ -185,10 +185,11 @@ export class UsersService {
     });
     ticket.entriesLeft = ticketType.maxEntries;
     // change the balance of the user with the price of the ticket deduced
-    const user = await this.usersRepository.findOneBy({ id: ticket.userID });
+    const user = await this.usersRepository.findOneBy({ id: userID });
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    TicketsValidator.valideUSerBalance(user, ticket.price);
     // Add the ticket price to the user's balance
     const transaction = this.transactionsRepository.create({
       user: user,
@@ -199,10 +200,16 @@ export class UsersService {
     return await this.ticketsRepository.save(ticket);
   }
 
-  async findCustomerTickets(params: ListTicketsDto): Promise<Ticket[]> {
+  async findCustomerTickets(
+    userId: number,
+    params: ListTicketsDto,
+  ): Promise<Ticket[]> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { balance, ...user } = await this.findOne(userId);
     return await this.ticketsRepository.find({
       take: params.limit || 10,
       skip: (params.page - 1) * params.limit || 0,
+      where: { user: user },
       relations: {
         screenings: true,
       },

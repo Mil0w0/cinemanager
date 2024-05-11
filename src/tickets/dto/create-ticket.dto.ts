@@ -7,12 +7,6 @@ export class CreateTicketDto {
   entriesLeft: number;
 
   @ApiProperty({
-    example: '1',
-    required: true,
-  })
-  userID: number;
-
-  @ApiProperty({
     example: '2021-05-01',
     required: false,
   })

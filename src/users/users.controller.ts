@@ -154,8 +154,11 @@ export class UsersController {
     status: 404,
     description: 'Ticket type or user not found',
   })
-  async buyTicket(@Body() createTicketDTO: CreateTicketDto): Promise<Ticket> {
-    return this.usersService.buyTicket(createTicketDTO);
+  async buyTicket(
+    @Param('userId') userID: number,
+    @Body() createTicketDTO: CreateTicketDto,
+  ): Promise<Ticket> {
+    return this.usersService.buyTicket(userID, createTicketDTO);
   }
 
   @Get(':userId/tickets')
@@ -164,8 +167,11 @@ export class UsersController {
     status: 200,
     description: 'The tickets have been successfully fetched.',
   })
-  async findTickets(@Query() query: ListTicketsDto): Promise<Ticket[]> {
-    return this.usersService.findCustomerTickets(query);
+  async findTickets(
+    @Param('userId') userID: number,
+    @Query() query: ListTicketsDto,
+  ): Promise<Ticket[]> {
+    return this.usersService.findCustomerTickets(userID, query);
   }
 
   @Get(':userId/tickets/:ticketId')

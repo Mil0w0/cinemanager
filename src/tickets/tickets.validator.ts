@@ -11,9 +11,6 @@ export class TicketsValidator {
     usersRepository: Repository<User>,
     ticketTypesRepository: Repository<TicketType>,
   ) {
-    if (!createTicketDto.userID) {
-      throw new Error('User ID is required');
-    }
     if (!createTicketDto.price) {
       throw new Error('Price is required');
     }
@@ -23,18 +20,14 @@ export class TicketsValidator {
     if (!createTicketDto.ticketTypeID) {
       throw new Error('Ticket type ID is required');
     }
-    if (!usersRepository.findOneBy({ id: createTicketDto.userID })) {
-      throw new Error('User not found');
-    }
     if (
       !ticketTypesRepository.findOneBy({ id: createTicketDto.ticketTypeID })
     ) {
       throw new Error('Ticket type not found');
     }
-    //get the user then check if the user as the necessary balance
-    const user = await usersRepository.findOneBy({
-      id: createTicketDto.userID,
-    });
+  }
+  static valideUSerBalance(user: User, price: number) {
+    //check if the user as the necessary balance
     let balance = 0;
     if (user.transactions && user.transactions.length > 0) {
       balance = user.transactions.reduce((sum, transaction) => {
@@ -43,7 +36,7 @@ export class TicketsValidator {
         return sum + amount;
       }, 0);
     }
-    if (balance < createTicketDto.price) {
+    if (balance < price) {
       throw new Error('User does not have enough balance');
     }
   }
